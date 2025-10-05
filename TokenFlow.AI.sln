@@ -9,17 +9,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8E9D0AFF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenFlow.AI", "src\TokenFlow.AI\TokenFlow.AI.csproj", "{70818393-97E1-4D62-99BD-3F40C0E4CA7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenFlow.Core", "src\TokenFlow.Core\TokenFlow.Core.csproj", "{5CC62029-220B-45AC-B073-77157764FDA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenFlow.Core", "src\TokenFlow.Core\TokenFlow.Core.csproj", "{5CC62029-220B-45AC-B073-77157764FDA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenFlow.Tools", "src\TokenFlow.Tools\TokenFlow.Tools.csproj", "{71AA6598-9FD9-4C8A-A88E-031CC6613CF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenFlow.Tools", "src\TokenFlow.Tools\TokenFlow.Tools.csproj", "{71AA6598-9FD9-4C8A-A88E-031CC6613CF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenFlow.Tokenizers", "src\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj", "{0EBD455A-1FD6-455B-B1EF-0C71DCE4090A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenFlow.Tokenizers", "src\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj", "{0EBD455A-1FD6-455B-B1EF-0C71DCE4090A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenFlow.Core.Tests", "tests\TokenFlow.Core.Tests\TokenFlow.Core.Tests.csproj", "{1272715B-C868-44A2-A1FA-F882D7E83430}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenFlow.Core.Tests", "tests\TokenFlow.Core.Tests\TokenFlow.Core.Tests.csproj", "{1272715B-C868-44A2-A1FA-F882D7E83430}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenFlow.AI.Tests", "tests\TokenFlow.AI.Tests\TokenFlow.AI.Tests.csproj", "{3ACD5C26-58C3-4787-9B77-83A83B9293FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenFlow.AI.Tests", "tests\TokenFlow.AI.Tests\TokenFlow.AI.Tests.csproj", "{3ACD5C26-58C3-4787-9B77-83A83B9293FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenFlow.Tools.Tests", "tests\TokenFlow.Tools.Tests\TokenFlow.Tools.Tests.csproj", "{D81C4456-A10A-4302-9E04-F7BAA6498DE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenFlow.Tools.Tests", "tests\TokenFlow.Tools.Tests\TokenFlow.Tools.Tests.csproj", "{D81C4456-A10A-4302-9E04-F7BAA6498DE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
