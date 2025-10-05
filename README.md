@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/AndrewClements84/TokenFlow.AI/master/assets/file_00000000dcd0620a8fa4d353c6d9a1b1.png" alt="TokenFlow.AI Logo" width="200"/>
-</p>
-
-# TokenFlow.AI
+![TokenFlow.AI](assets/logo.png)
 
 [![Build](https://github.com/AndrewClements84/TokenFlow.AI/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AndrewClements84/TokenFlow.AI/actions)
 [![codecov](https://codecov.io/gh/AndrewClements84/TokenFlow.AI/branch/master/graph/badge.svg)](https://codecov.io/gh/AndrewClements84/TokenFlow.AI)
