@@ -86,6 +86,32 @@ namespace TokenFlow.AI.Tests.Chunking
             string recombined = string.Join("", chunks.Select(c => c.Text));
             Assert.Contains("FlowAI", recombined);
         }
+
+        [Fact]
+        public void ChunkByTokens_ShouldShrinkSlice_WhenTokenCountExceedsLimit()
+        {
+            // Arrange
+            var chunker = new TokenChunker(new ApproxTokenizer());
+
+            // This creates a text large enough that the estimated slice
+            // will initially exceed maxTokens and trigger the shrink loop.
+            string text = string.Join(" ", Enumerable.Repeat("TokenFlowAI", 200));
+
+            // Act
+            var chunks = chunker.ChunkByTokens(text, 5); // intentionally small limit to force shrink
+
+            // Assert
+            Assert.NotEmpty(chunks);
+            Assert.All(chunks, c => Assert.True(c.TokenCount <= 5, "Chunk should be shrunk to meet maxTokens limit"));
+        }
+
+        [Fact]
+        public void ChunkByTokens_ShouldBreakShrinkLoop_WhenSliceLengthBecomesZero()
+        {
+            var chunker = new TokenChunker(new ApproxTokenizer());
+            string text = "X"; // so small that sliceLength will quickly drop to 0
+            Assert.NotEmpty(chunker.ChunkByTokens(text, 1));
+        }
     }
 }
 
