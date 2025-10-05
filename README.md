@@ -27,7 +27,7 @@ It forms the **core engine** of the *Flow.AI* ecosystem — powering accurate to
 - 💰 Real-time **cost estimation** for input/output usage  
 - 🔌 Pluggable **tokenizer providers** (OpenAI, Anthropic, Azure AI)  
 - 📦 **Zero external dependencies** — small, fast, portable  
-- 🧠 Designed for use in **PromptStream.AI** and **DataFlow.AI**
+- 🧠 Designed for use in **PromptStream.AI**, **DataFlow.AI**, and **ReasonFlow.AI**
 
 ---
 
@@ -81,9 +81,38 @@ All unit tests are implemented using **xUnit** and run automatically via GitHub 
 
 | Package | Purpose |
 |----------|----------|
-| 🧠 **TokenFlow.AI** | Core tokenization & cost estimation |
+| 🧠 **TokenFlow.AI** | Core tokenization, chunking & cost estimation |
 | 💬 **PromptStream.AI** | Prompt composition & validation |
-| 📊 **DataFlow.AI** | Data ingestion & streaming pipelines |
+| 📊 **DataFlow.AI** | Data ingestion & structured streaming pipelines |
+| 🧩 **ReasonFlow.AI** | Logical reasoning & multi-step thought orchestration |
+| 🧬 **ModelFlow.AI** | Unified model abstraction & configuration registry |
+| 💭 **ChatFlow.AI** | Conversational orchestration & dialogue state management |
+
+---
+
+### 🛠️ Roadmap
+
+#### ✅ Completed
+- [x] Core interfaces and models (`ITokenizer`, `ICostEstimator`, `ModelSpec`, `TokenCountResult`)
+- [x] Implemented `ApproxTokenizer`, `CostEstimator`, and `ModelRegistry`
+- [x] Added `TokenChunker` and full test coverage
+- [x] CI/CD workflow with Codecov and automated NuGet publishing
+- [x] Achieved 100% line and branch coverage across all components
+
+#### 🚧 In Progress
+- [ ] Add `TokenFlowClient` — unified entry point for developers
+- [ ] Introduce `TokenUsageTracker` for cumulative cost tracking
+- [ ] Implement `ITokenizerFactory` for dynamic tokenizer resolution
+- [ ] Extend `ModelRegistry` to support JSON configuration loading
+- [ ] CLI utilities via **TokenFlow.Tools**
+- [ ] Benchmark suite using BenchmarkDotNet
+
+#### 🌟 Future Goals
+- [ ] Integration with **PromptStream.AI** for prompt budget validation
+- [ ] Integration with **DataFlow.AI** for token-based stream segmentation
+- [ ] Advanced tokenizers (OpenAI tiktoken, Claude tokenizer)
+- [ ] Developer documentation & sample apps
+- [ ] Public release under Flow.AI brand umbrella
 
 ---
 
@@ -99,3 +128,7 @@ If you’d like to contribute to the **Flow.AI** ecosystem, please read the upco
 Distributed under the **MIT License**.  
 See [`LICENSE`](LICENSE) for details.
 
+---
+
+> ⭐ **If you find TokenFlow.AI useful, please give the repository a star on GitHub!**  
+> It helps others discover the Flow.AI ecosystem and supports ongoing development.
