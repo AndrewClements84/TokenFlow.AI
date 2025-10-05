@@ -18,7 +18,53 @@ namespace TokenFlow.AI.Tests.Tokenizer
         }
 
         [Fact]
-        public void CountTokens_ShouldReturnZero_WhenMessagesIsNull()
+        public void CountTokens_ShouldReturnZero_ForEmptyText()
+        {
+            // Arrange
+            var tokenizer = new ApproxTokenizer();
+
+            // Act
+            int count = tokenizer.CountTokens(string.Empty);
+
+            // Assert
+            Assert.Equal(0, count);
+        }
+
+        [Fact]
+        public void CountTokens_ShouldReturnExpectedCount_ForNormalSentence()
+        {
+            // Arrange
+            var tokenizer = new ApproxTokenizer();
+            string text = "Hello world! This is TokenFlow.AI.";
+
+            // Act
+            int count = tokenizer.CountTokens(text);
+
+            // Assert
+            Assert.True(count > 0);
+            Assert.Equal(tokenizer.Encode(text).Count, count);
+        }
+
+        [Fact]
+        public void CountTokens_Messages_ShouldReturnSumOfEachMessage()
+        {
+            // Arrange
+            var tokenizer = new ApproxTokenizer();
+            var messages = new[]
+            {
+                ("system", "You are a helpful assistant."),
+                ("user", "What is the weather today?")
+            };
+
+            // Act
+            int count = tokenizer.CountTokens(messages);
+
+            // Assert
+            Assert.True(count > 0);
+        }
+
+        [Fact]
+        public void CountTokens_Messages_ShouldReturnZero_WhenMessagesIsNull()
         {
             // Arrange
             var tokenizer = new ApproxTokenizer();
@@ -28,6 +74,22 @@ namespace TokenFlow.AI.Tests.Tokenizer
 
             // Assert
             Assert.Equal(0, count);
+        }
+
+        [Fact]
+        public void Encode_ShouldReturnTokens_WhenTextIsValid()
+        {
+            // Arrange
+            var tokenizer = new ApproxTokenizer();
+            string text = "TokenFlow.AI works well!";
+
+            // Act
+            var tokens = tokenizer.Encode(text);
+
+            // Assert
+            Assert.NotNull(tokens);
+            Assert.NotEmpty(tokens);
+            Assert.Contains("TokenFlow", string.Join("", tokens));
         }
 
         [Fact]
@@ -48,6 +110,21 @@ namespace TokenFlow.AI.Tests.Tokenizer
         }
 
         [Fact]
+        public void Decode_ShouldRecombineTokens_IntoSentence()
+        {
+            // Arrange
+            var tokenizer = new ApproxTokenizer();
+            var tokens = new List<string> { "Hello", "world", "!" };
+
+            // Act
+            var text = tokenizer.Decode(tokens);
+
+            // Assert
+            Assert.Contains("Hello", text);
+            Assert.Contains("world", text);
+        }
+
+        [Fact]
         public void Decode_ShouldReturnEmptyString_WhenTokensIsNull()
         {
             // Arrange
@@ -61,17 +138,31 @@ namespace TokenFlow.AI.Tests.Tokenizer
         }
 
         [Fact]
-        public void CountTokens_ShouldHandleRegularInput()
+        public void Decode_ShouldHandleEmptyTokenList()
         {
             // Arrange
             var tokenizer = new ApproxTokenizer();
-            string text = "This is TokenFlow.AI!";
+            var tokens = new List<string>();
 
             // Act
-            int tokens = tokenizer.CountTokens(text);
+            var text = tokenizer.Decode(tokens);
 
             // Assert
-            Assert.True(tokens > 0);
+            Assert.Equal(string.Empty, text.Trim());
+        }
+
+        [Fact]
+        public void CountTokens_ShouldHandlePunctuationProperly()
+        {
+            // Arrange
+            var tokenizer = new ApproxTokenizer();
+            string text = "Hi! How's this? Good.";
+
+            // Act
+            int count = tokenizer.CountTokens(text);
+
+            // Assert
+            Assert.True(count > 3); // should split punctuation separately
         }
     }
 }
