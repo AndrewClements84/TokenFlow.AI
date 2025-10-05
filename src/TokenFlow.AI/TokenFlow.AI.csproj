@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>TokenFlow.AI</AssemblyName>
+		<RootNamespace>TokenFlow.AI</RootNamespace>
+		<PackageId>TokenFlow.AI</PackageId>
+		<Authors>Andrew Clements</Authors>
+		<Company>Flow.AI</Company>
+		<Description>Core implementation for TokenFlow.AI — token counting, chunking, and cost estimation utilities for .NET.</Description>
+		<RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
+		<PackageTags>tokenization; llm; openai; azure; ai; .net</PackageTags>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
+  </ItemGroup>
+
+</Project>
