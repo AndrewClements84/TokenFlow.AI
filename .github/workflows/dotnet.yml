@@ -1,28 +1,87 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: .NET Build, Test & Publish
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master, main ]
+    tags:
+      - 'v*.*.*'       # Triggers publish on semantic version tags
   pull_request:
-    branches: [ "master" ]
+    branches: [ master, main ]
 
 jobs:
   build:
-
+    name: Build & Test
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - name: ✅ Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🧰 Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 💾 Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: 📦 Restore dependencies
+        run: dotnet restore TokenFlow.AI.sln
+
+      - name: 🏗️ Build solution
+        run: dotnet build TokenFlow.AI.sln --no-restore --configuration Release
+
+      - name: 🧪 Run tests
+        run: dotnet test TokenFlow.AI.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
+
+      - name: 📊 Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./tests/**/coverage.cobertura.xml
+          flags: unittests
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: 🟩 Mark build status
+        if: success()
+        run: echo "✅ Build and tests passed!"
+
+      - name: 🟥 Mark build failed
+        if: failure()
+        run: echo "❌ Build or tests failed."
+
+  publish:
+    name: 📦 Publish NuGet Package
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🧰 Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 📦 Restore dependencies
+        run: dotnet restore TokenFlow.AI.sln
+
+      - name: 🏗️ Build in Release mode
+        run: dotnet build TokenFlow.AI.sln --configuration Release --no-restore
+
+      - name: 🧩 Pack NuGet packages
+        run: dotnet pack TokenFlow.AI.sln --configuration Release --no-build -o ./artifacts
+
+      - name: 🚀 Publish to NuGet (only on tagged release)
+        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
