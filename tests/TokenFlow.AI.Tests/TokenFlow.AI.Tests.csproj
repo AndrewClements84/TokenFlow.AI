@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,6 +6,10 @@
 	<RootNamespace>TokenFlow.AI.Tests</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+	<CollectCoverage>true</CollectCoverage>
+	<CoverletOutputFormat>cobertura</CoverletOutputFormat>
+	<CoverletOutput>./coverage.cobertura.xml</CoverletOutput>
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
