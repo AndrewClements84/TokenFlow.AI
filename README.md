@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AndrewClements84/TokenFlow.AI/master/assets/logo.png" alt="TokenFlow.AI Logo" width="200"/>
+  <img src="https://raw.githubusercontent.com/AndrewClements84/TokenFlow.AI/master/assets/file_00000000dcd0620a8fa4d353c6d9a1b1.png" alt="TokenFlow.AI Logo" width="200"/>
 </p>
 
 # TokenFlow.AI
