@@ -6,15 +6,15 @@ namespace TokenFlow.Tools.Commands
 {
     public static class CountCommand
     {
-        public static int Run(string text)
+        public static int Run(string text, IModelRegistry registry = null)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
-                Console.WriteLine("Please provide text to count tokens for.");
+                Console.WriteLine("Please provide text to count.");
                 return 1;
             }
 
-            var registry = new ModelRegistry(); // Loads embedded by default
+            registry ??= new ModelRegistry();
             Console.WriteLine($"[TokenFlow.AI] Using model registry source: {registry.LoadSource}");
 
             var client = new TokenFlowClient("gpt-4o");

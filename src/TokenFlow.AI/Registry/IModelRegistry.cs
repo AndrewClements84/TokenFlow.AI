@@ -4,38 +4,42 @@ using TokenFlow.Core.Models;
 namespace TokenFlow.AI.Registry
 {
     /// <summary>
-    /// Defines a registry for managing and retrieving model specifications.
+    /// Defines a contract for accessing and managing model metadata
+    /// within the TokenFlow.AI registry system.
     /// </summary>
     public interface IModelRegistry
     {
         /// <summary>
-        /// Registers a model in the registry or replaces an existing one with the same ID.
+        /// Registers a new model or updates an existing one in the registry.
         /// </summary>
+        /// <param name="model">The model to register.</param>
         void Register(ModelSpec model);
 
         /// <summary>
-        /// Attempts to retrieve a model by its ID.
+        /// Attempts to retrieve a model by its unique identifier.
         /// </summary>
+        /// <param name="id">The model identifier.</param>
+        /// <param name="model">The resulting model, if found.</param>
+        /// <returns><c>true</c> if the model exists; otherwise, <c>false</c>.</returns>
         bool TryGet(string id, out ModelSpec model);
 
         /// <summary>
-        /// Retrieves a model specification by its unique ID.
+        /// Retrieves a model by its unique identifier, or <c>null</c> if not found.
         /// </summary>
+        /// <param name="id">The model identifier.</param>
+        /// <returns>The model if found; otherwise, <c>null</c>.</returns>
         ModelSpec GetById(string id);
 
         /// <summary>
-        /// Retrieves all registered model specifications.
+        /// Returns all registered models as a read-only list.
         /// </summary>
         IReadOnlyList<ModelSpec> GetAll();
 
         /// <summary>
-        /// Loads model definitions from a JSON file.
+        /// Describes the source from which the models were loaded.
+        /// Can be "Remote", "Local", "Embedded", or "Unknown".
         /// </summary>
-        void LoadFromJsonFile(string filePath);
-
-        /// <summary>
-        /// Loads model definitions from a JSON string.
-        /// </summary>
-        void LoadFromJsonString(string json);
+        string LoadSource { get; }
     }
 }
+

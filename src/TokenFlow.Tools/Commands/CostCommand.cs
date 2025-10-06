@@ -6,7 +6,7 @@ namespace TokenFlow.Tools.Commands
 {
     public static class CostCommand
     {
-        public static int Run(string text)
+        public static int Run(string text, IModelRegistry registry = null)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -14,7 +14,7 @@ namespace TokenFlow.Tools.Commands
                 return 1;
             }
 
-            var registry = new ModelRegistry();
+            registry ??= new ModelRegistry();
             Console.WriteLine($"[TokenFlow.AI] Using model registry source: {registry.LoadSource}");
 
             var client = new TokenFlowClient("gpt-4o");
@@ -26,5 +26,3 @@ namespace TokenFlow.Tools.Commands
         }
     }
 }
-
-

@@ -44,25 +44,13 @@ namespace TokenFlow.Tools.Tests
         [Fact]
         public void Run_ShouldPrintRegistrySource()
         {
-            var output = CaptureConsoleOut(() =>
+            var output = ConsoleCaptureHelper.Capture(() =>
             {
                 int result = CountCommand.Run("Hello world!");
                 Assert.Equal(0, result);
             });
 
             Assert.Contains("[TokenFlow.AI] Using model registry source:", output);
-        }
-
-        private static string CaptureConsoleOut(Action action)
-        {
-            var original = Console.Out;
-            using (var sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-                action();
-                Console.SetOut(original);
-                return sw.ToString();
-            }
         }
     }
 }
