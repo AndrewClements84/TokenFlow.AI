@@ -14,20 +14,21 @@
 
 ### 💡 Overview
 
-**TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) like OpenAI GPT-4o and Anthropic Claude.
+**TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT‑4o, Anthropic Claude, and Azure OpenAI.
 
-It forms the **core engine** of the *Flow.AI* ecosystem — powering accurate token counting, text splitting, and real-time cost tracking for AI-driven applications.
+It serves as the **core engine** of the *Flow.AI* ecosystem — providing accurate token counting, intelligent text splitting, and real‑time cost tracking for any AI‑driven application.
 
 ---
 
 ### 🧩 Key Features
 
-- 🔢 GPT-style **token counting** for .NET  
-- 🧱 Smart **text chunking** with configurable token limits  
-- 💰 Real-time **cost estimation** for input/output usage  
+- 🔢 GPT‑style **token counting** for .NET  
+- 🧱 Smart **text chunking** with configurable token limits and overlap  
+- 💰 Real‑time **cost estimation** for prompt and completion usage  
 - 🔌 Pluggable **tokenizer providers** (OpenAI, Anthropic, Azure AI)  
-- 📦 **Zero external dependencies** — small, fast, portable  
-- 🧠 Designed for use in **PromptStream.AI**, **DataFlow.AI**, and **ReasonFlow.AI**
+- 🧮 Unified **TokenFlowClient** for developers — analyze, chunk, and cost in one API  
+- 📦 **Zero external dependencies** — small, fast, and portable  
+- 🧠 Designed to integrate with **PromptStream.AI**, **DataFlow.AI**, and **ReasonFlow.AI**
 
 ---
 
@@ -37,7 +38,7 @@ It forms the **core engine** of the *Flow.AI* ecosystem — powering accurate to
 dotnet add package TokenFlow.AI
 ```
 
-Or install the core contracts only:
+Or install the shared core contracts:
 
 ```bash
 dotnet add package TokenFlow.Core
@@ -47,22 +48,46 @@ dotnet add package TokenFlow.Core
 
 ### 🧠 Quick Example
 
+**Token analysis and cost estimation:**
+
 ```csharp
-using TokenFlow.AI.Costing;
-using TokenFlow.AI.Tokenizer;
-using TokenFlow.Core.Models;
+using TokenFlow.AI.Client;
 
-var model = new ModelSpec("gpt-4o", "openai", "approx", 128000, 4096, 0.01m, 0.03m);
-var tokenizer = new ApproxTokenizer();
-var estimator = new CostEstimator();
+var client = new TokenFlowClient("gpt-4o");
+var result = client.AnalyzeText("TokenFlow.AI brings structure to prompt engineering.");
 
-string input = "TokenFlow.AI makes cost tracking easy!";
-int tokenCount = tokenizer.CountTokens(input);
+Console.WriteLine($"Model: {result.ModelId}");
+Console.WriteLine($"Tokens: {result.TokenCount}");
+Console.WriteLine($"Estimated cost: £{result.EstimatedCost:F4}");
+```
 
-var result = new TokenCountResult(tokenCount, 0, tokenCount);
-decimal cost = estimator.EstimateTotalCost(result, model);
+**Chunking long text:**
 
-Console.WriteLine($"Tokens: {tokenCount}, Estimated cost: {cost:C4}");
+```csharp
+var chunks = client.ChunkText("This is a long body of text that exceeds a given token limit...", maxTokens: 50, overlapTokens: 5);
+
+foreach (var chunk in chunks)
+    Console.WriteLine($"Chunk: {chunk.Substring(0, Math.Min(40, chunk.Length))}...");
+```
+
+---
+
+### 🧩 Example Architecture
+
+```
+TokenFlow.AI
+├─ Client/
+│  ├─ ITokenFlowClient.cs
+│  └─ TokenFlowClient.cs
+├─ Chunking/
+│  ├─ ITextChunker.cs
+│  └─ TokenChunker.cs
+├─ Tokenizer/
+│  └─ ApproxTokenizer.cs
+├─ Costing/
+│  └─ CostEstimator.cs
+└─ Registry/
+   └─ ModelRegistry.cs
 ```
 
 ---
@@ -73,7 +98,8 @@ Console.WriteLine($"Tokens: {tokenCount}, Estimated cost: {cost:C4}");
 dotnet test --no-build --verbosity normal
 ```
 
-All unit tests are implemented using **xUnit** and run automatically via GitHub Actions.
+All unit tests are written in **xUnit** and run automatically through GitHub Actions.  
+Code coverage is tracked with **Codecov**, and the project maintains **100% line and branch coverage**.
 
 ---
 
@@ -95,12 +121,13 @@ All unit tests are implemented using **xUnit** and run automatically via GitHub 
 #### ✅ Completed
 - [x] Core interfaces and models (`ITokenizer`, `ICostEstimator`, `ModelSpec`, `TokenCountResult`)
 - [x] Implemented `ApproxTokenizer`, `CostEstimator`, and `ModelRegistry`
-- [x] Added `TokenChunker` and full test coverage
-- [x] CI/CD workflow with Codecov and automated NuGet publishing
-- [x] Achieved 100% line and branch coverage across all components
+- [x] Added `TokenChunker` with overlap support
+- [x] Added `TokenFlowClient` — unified entry point for developers
+- [x] Full xUnit test suite with **100% code coverage**
+- [x] CI/CD pipeline with Codecov and automated NuGet publishing
+- [x] Dual targeting for **.NET Standard 2.0** and **.NET 8.0**
 
 #### 🚧 In Progress
-- [ ] Add `TokenFlowClient` — unified entry point for developers
 - [ ] Introduce `TokenUsageTracker` for cumulative cost tracking
 - [ ] Implement `ITokenizerFactory` for dynamic tokenizer resolution
 - [ ] Extend `ModelRegistry` to support JSON configuration loading
