@@ -40,6 +40,23 @@ namespace TokenFlow.AI.Tests.Registry
             // Cleanup
             File.Delete(tempFile);
         }
+
+        [Fact]
+        public void LoadFromUrl_ShouldReturnNull_WhenJsonIsWhitespace()
+        {
+            // Arrange: create a temp file with whitespace and use file:// URI
+            string path = Path.GetTempFileName();
+            File.WriteAllText(path, "   ");
+            var uri = new Uri(path);
+
+            // Act
+            var result = ModelRegistryRemoteLoader.LoadFromUrl(uri.ToString());
+
+            // Assert
+            Assert.Null(result); // triggers `if (string.IsNullOrWhiteSpace(json)) return null;`
+
+            File.Delete(path);
+        }
     }
 }
 

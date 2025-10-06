@@ -50,6 +50,23 @@ namespace TokenFlow.AI.Tests.Registry
 
             File.Delete(path);
         }
+
+        [Fact]
+        public void LoadFromFile_ShouldReturnNewList_WhenDeserializedNull()
+        {
+            // Arrange
+            string path = Path.GetTempFileName();
+            File.WriteAllText(path, "null");
+
+            // Act
+            var result = ModelRegistryJsonLoader.LoadFromFile(path);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result); // should trigger `return models ?? new List<ModelSpec>()`
+
+            File.Delete(path);
+        }
     }
 }
 
