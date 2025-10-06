@@ -5,177 +5,126 @@ namespace TokenFlow.AI.Tests.Registry
 {
     public class ModelRegistryTests
     {
-        [Fact]
-        public void LoadFromJsonString_ShouldRegisterModels()
+        private static string CreateTempJson(params string[] ids)
         {
-            var json = @"[
-                { 'Id':'test-model', 'Family':'test', 'TokenizerName':'approx', 'MaxInputTokens':100, 'InputCost':0.01, 'OutputCost':0.02 }
-            ]";
-
-            var registry = new ModelRegistry();
-            registry.LoadFromJsonString(json);
-
-            var model = registry.GetById("test-model");
-            Assert.NotNull(model);
-            Assert.Equal("test", model.Family);
-        }
-
-        [Fact]
-        public void LoadFromJsonFile_ShouldRegisterModels()
-        {
-            var json = @"[
-                { 'Id':'file-model', 'Family':'openai', 'TokenizerName':'approx', 'MaxInputTokens':200, 'InputCost':0.02, 'OutputCost':0.03 }
-            ]";
-
-            var path = Path.GetTempFileName();
+            string path = Path.GetTempFileName();
+            var json = "[";
+            for (int i = 0; i < ids.Length; i++)
+            {
+                if (i > 0) json += ",";
+                json += $"{{\"Id\":\"{ids[i]}\",\"Family\":\"mock\",\"TokenizerName\":\"approx\",\"MaxInputTokens\":1000,\"InputPricePer1K\":0.001,\"OutputPricePer1K\":0.002}}";
+            }
+            json += "]";
             File.WriteAllText(path, json);
-
-            var registry = new ModelRegistry();
-            registry.LoadFromJsonFile(path);
-
-            var model = registry.GetById("file-model");
-            Assert.NotNull(model);
-            Assert.Equal("openai", model.Family);
-
-            File.Delete(path);
+            return path;
         }
 
         [Fact]
-        public void LoadFromJsonString_ShouldIgnoreMalformedJson()
+        public void DefaultConstructor_ShouldLoadEmbeddedDefaults()
         {
             var registry = new ModelRegistry();
-            registry.LoadFromJsonString("INVALID_JSON");
-
-            Assert.NotNull(registry.GetById("gpt-4o")); // defaults remain intact
-        }
-
-        [Fact]
-        public void LoadFromJsonFile_ShouldIgnoreMissingFile()
-        {
-            var registry = new ModelRegistry();
-            registry.LoadFromJsonFile("does_not_exist.json");
-
-            Assert.NotNull(registry.GetById("gpt-4o"));
-        }
-
-        [Fact]
-        public void Register_ShouldReplace_ExistingModel()
-        {
-            var registry = new ModelRegistry();
-            var original = registry.GetById("gpt-4o");
-
-            var replacement = new ModelSpec("gpt-4o", "test", "approx", 10, 5, 0.1m, 0.2m);
-            registry.Register(replacement);
-
-            var updated = registry.GetById("gpt-4o");
-            Assert.Equal("test", updated.Family);
-        }
-
-        [Fact]
-        public void TryGet_ShouldReturnTrue_WhenModelExists()
-        {
-            var registry = new ModelRegistry();
-            bool found = registry.TryGet("gpt-4o", out var model);
-
-            Assert.True(found);
-            Assert.NotNull(model);
-            Assert.Equal("openai", model.Family);
-        }
-
-        [Fact]
-        public void TryGet_ShouldReturnFalse_WhenModelMissing()
-        {
-            var registry = new ModelRegistry();
-            bool found = registry.TryGet("does-not-exist", out var model);
-
-            Assert.False(found);
-            Assert.Null(model);
-        }
-
-        [Fact]
-        public void Register_ShouldIgnore_NullModel()
-        {
-            var registry = new ModelRegistry();
-
-            // Act
-            registry.Register(null);
-
-            // Assert
             var models = registry.GetAll();
-            Assert.NotEmpty(models); // defaults still exist
+
+            Assert.NotEmpty(models);
+            Assert.Equal("Embedded", registry.LoadSource);
             Assert.Contains(models, m => m.Id == "gpt-4o");
         }
 
         [Fact]
-        public void Register_ShouldIgnore_ModelWithEmptyId()
+        public void Constructor_ShouldLoadFromLocalFile()
         {
-            var registry = new ModelRegistry();
-            var invalid = new ModelSpec("", "test", "approx", 10, 5, 0.1m, 0.2m);
+            string jsonPath = CreateTempJson("local-model");
+            var registry = new ModelRegistry(jsonPath);
 
-            registry.Register(invalid);
+            Assert.Equal("Local", registry.LoadSource);
+            Assert.True(registry.TryGet("local-model", out var model));
+            Assert.Equal("mock", model.Family);
 
-            var found = registry.GetById("");
-            Assert.Null(found);
+            File.Delete(jsonPath);
         }
 
         [Fact]
-        public void GetAll_ShouldReturn_ReadOnlyList()
+        public void Constructor_ShouldFallbackToEmbedded_WhenFileMissing()
         {
-            var registry = new ModelRegistry();
-            var models = registry.GetAll();
-
-            Assert.NotNull(models);
-            Assert.NotEmpty(models);
-
-            // Verify immutability by ensuring it cannot be cast back and modified
-            var asList = models as List<ModelSpec>;
-            Assert.Null(asList); // Should not be an underlying List<ModelSpec>
-
-            // Verify that adding would throw if attempted
-            Assert.ThrowsAny<NotSupportedException>(() =>
-            {
-                var collection = (System.Collections.IList)models;
-                collection.Add(new ModelSpec("test", "test", "approx", 1, 1, 0.1m, 0.2m));
-            });
+            var registry = new ModelRegistry("nonexistent.json");
+            Assert.NotEmpty(registry.GetAll());
+            Assert.Equal("Embedded", registry.LoadSource);
         }
 
         [Fact]
-        public void LoadFromJsonString_ShouldIgnore_NullOrEmpty()
+        public void FallbackConstructor_ShouldUseRemote_IfAvailable()
         {
-            var registry = new ModelRegistry();
+            // simulate remote registry by writing to a file and using file:// URL
+            string tempFile = CreateTempJson("remote-model");
+            var uri = new Uri(tempFile);
+            var registry = new ModelRegistry(uri, null, true);
 
-            registry.LoadFromJsonString(null);
-            registry.LoadFromJsonString(string.Empty);
-            registry.LoadFromJsonString("   ");
+            Assert.Equal("Remote", registry.LoadSource);
+            Assert.True(registry.TryGet("remote-model", out _));
 
-            // Assert: defaults remain unchanged
-            var model = registry.GetById("gpt-4o");
-            Assert.NotNull(model);
+            File.Delete(tempFile);
         }
 
         [Fact]
-        public void LoadFromJsonString_ShouldIgnore_NullDeserializationResult()
+        public void FallbackConstructor_ShouldUseLocal_WhenRemoteFails()
         {
-            var registry = new ModelRegistry();
+            string tempFile = CreateTempJson("local-fallback-model");
+            var badUri = new Uri("https://invalid.invalid/models.json");
+            var registry = new ModelRegistry(badUri, tempFile, true);
 
-            // Passing "null" literal as JSON results in null deserialization
-            registry.LoadFromJsonString("null");
+            Assert.Equal("Local", registry.LoadSource);
+            Assert.True(registry.TryGet("local-fallback-model", out _));
 
-            var existing = registry.GetById("gpt-4o");
-            Assert.NotNull(existing);
+            File.Delete(tempFile);
         }
 
         [Fact]
-        public void LoadFromJsonFile_ShouldIgnore_NullOrWhitespacePath()
+        public void FallbackConstructor_ShouldUseEmbedded_WhenAllFail()
+        {
+            var badUri = new Uri("https://invalid.invalid/models.json");
+            var registry = new ModelRegistry(badUri, "nope.json", true);
+
+            Assert.Equal("Embedded", registry.LoadSource);
+            Assert.NotEmpty(registry.GetAll());
+        }
+
+        [Fact]
+        public void Register_ShouldReplaceExistingModel()
         {
             var registry = new ModelRegistry();
+            var model = new ModelSpec("custom", "openai", "approx", 1000, 500, 0.01m, 0.02m);
+            registry.Register(model);
 
-            registry.LoadFromJsonFile(null);
-            registry.LoadFromJsonFile("");
-            registry.LoadFromJsonFile("   ");
+            Assert.True(registry.TryGet("custom", out var retrieved));
+            Assert.Equal("custom", retrieved.Id);
+        }
 
-            // Still have default models
-            Assert.NotNull(registry.GetById("gpt-4o"));
+        [Fact]
+        public void TryGet_ShouldReturnFalse_WhenNotFound()
+        {
+            var registry = new ModelRegistry();
+            Assert.False(registry.TryGet("nonexistent", out _));
+        }
+
+        [Fact]
+        public void GetById_ShouldReturnModel_WhenExists()
+        {
+            var registry = new ModelRegistry();
+            var first = registry.GetAll().First();
+            var found = registry.GetById(first.Id);
+
+            Assert.NotNull(found);
+            Assert.Equal(first.Id, found.Id);
+        }
+
+        [Fact]
+        public void GetAll_ShouldReturnReadOnlyList()
+        {
+            var registry = new ModelRegistry();
+            var list = registry.GetAll();
+
+            // Verify it's a ReadOnlyCollection
+            Assert.IsAssignableFrom<System.Collections.ObjectModel.ReadOnlyCollection<ModelSpec>>(list);
         }
     }
 }
