@@ -60,7 +60,7 @@ jobs:
         run: echo "❌ Build or tests failed."
 
   publish:
-    name: 📦 Publish NuGet Package
+    name: 📦 Publish NuGet Packages
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
@@ -80,8 +80,13 @@ jobs:
       - name: 🏗️ Build in Release mode
         run: dotnet build TokenFlow.AI.sln --configuration Release --no-restore
 
-      - name: 🧩 Pack NuGet packages
-        run: dotnet pack TokenFlow.AI.sln --configuration Release --no-build -o ./artifacts
+      # Only pack TokenFlow.AI and TokenFlow.Core
+      - name: 📦 Pack TokenFlow.Core
+        run: dotnet pack src/TokenFlow.Core/TokenFlow.Core.csproj --configuration Release --no-build -o ./artifacts
+
+      - name: 📦 Pack TokenFlow.AI
+        run: dotnet pack src/TokenFlow.AI/TokenFlow.AI.csproj --configuration Release --no-build -o ./artifacts
 
       - name: 🚀 Publish to NuGet (only on tagged release)
         run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
