@@ -1,16 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<AssemblyName>TokenFlow.AI</AssemblyName>
-		<RootNamespace>TokenFlow.AI</RootNamespace>
-		<PackageId>TokenFlow.AI</PackageId>
-		<Authors>Andrew Clements</Authors>
-		<Company>Flow.AI</Company>
-		<Description>Core implementation for TokenFlow.AI — token counting, chunking, and cost estimation utilities for .NET.</Description>
-		<RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
-		<PackageTags>tokenization; llm; openai; azure; ai; .net</PackageTags>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <AssemblyName>TokenFlow.AI</AssemblyName>
+    <RootNamespace>TokenFlow.AI</RootNamespace>
+
+    <!-- NuGet package identity -->
+    <PackageId>TokenFlow.AI</PackageId>
+    <Version>0.3.0</Version>
+    <Authors>Andrew Clements</Authors>
+    <Company>Andrew Clements</Company>
+    <Product>TokenFlow.AI</Product>
+
+    <!-- Package metadata -->
+    <Description>TokenFlow.AI — Core tokenization, chunking, and cost estimation utilities for .NET LLM integrations.</Description>
+    <PackageTags>tokenization; llm; openai; azure; ai; .net; flow.ai</PackageTags>
+    <RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/AndrewClements84/TokenFlow.AI</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <RepositoryType>git</RepositoryType>
+
+    <!-- Build & publish settings -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageOutputPath>..\..\artifacts</PackageOutputPath>
+
+    <!-- Optional but nice-to-have -->
+    <NeutralLanguage>en</NeutralLanguage>
+    <!-- <Copyright>© 2025 Andrew Clements</Copyright> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\logo.png" Pack="true" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />

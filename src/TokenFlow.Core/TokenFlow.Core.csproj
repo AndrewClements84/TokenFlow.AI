@@ -1,15 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-		<AssemblyName>TokenFlow.Core</AssemblyName>
-		<RootNamespace>TokenFlow.Core</RootNamespace>
-		<PackageId>TokenFlow.Core</PackageId>
-		<Authors>Andrew Clements</Authors>
-		<Company>Flow.AI</Company>
-		<Description>Core abstractions and data models for TokenFlow.AI — a .NET library for tokenization and cost estimation.</Description>
-		<RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
-		<PackageTags>tokenization; llm; openai; azure; .net; ai</PackageTags>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <PackageId>TokenFlow.Core</PackageId>
+    <Version>0.3.0</Version>
+    <Authors>Andrew Clements</Authors>
+    <Company>Andrew Clements</Company>
+    <Description>Shared interfaces and models for TokenFlow.AI — providing cross-library contracts for tokenization and cost estimation.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
+    <PackageTags>tokenization; core; llm; ai; .net; flow.ai</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\logo.png" Pack="true" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
 
 </Project>
