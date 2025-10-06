@@ -8,11 +8,49 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 ### 🚧 In Progress
-- Introduce `TokenUsageTracker` for cumulative cost tracking
-- Implement `ITokenizerFactory` for dynamic tokenizer resolution
 - Extend `ModelRegistry` to support JSON configuration loading
-- CLI utilities via `TokenFlow.Tools`
-- Benchmark suite using BenchmarkDotNet
+- Developer documentation site (API + usage guides)
+- Expand CLI command options and argument handling
+- Add advanced tokenizer providers (OpenAI `tiktoken`, Anthropic `Claude`)
+
+---
+
+## [0.3.4] — 2025-10-06
+### ✨ New Features
+- Added **TokenFlow.Tools** — developer CLI utilities for command-line token, chunk, and cost analysis  
+- Added **TokenFlow.Tools.Benchmarks** — BenchmarkDotNet performance suite for profiling tokenization and cost estimation  
+- Introduced `TokenUsageTracker` for cumulative token and cost tracking across analyses  
+- Implemented `ITokenizerFactory` for dynamic tokenizer resolution  
+
+### 🧹 Improvements
+- Maintained **100% code coverage** across all projects  
+- Improved **ModelRegistry** with safer `TryGet` and `Add` handling  
+- Refactored **CLI commands** (`count`, `chunk`, `cost`) for clearer output and error handling  
+- Enhanced **TokenFlowClient** for consistent API responses  
+
+### ⚙️ DevOps & CI/CD
+- Updated `.github/workflows/dotnet.yml` with:
+  - Benchmark build smoke test (compile-only verification)
+  - Isolated publish steps for `TokenFlow.AI` and `TokenFlow.Core`
+  - Improved job naming and clarity
+- Ensured benchmark projects and CLI utilities are excluded from NuGet publishing  
+- Validated benchmark compilation within CI builds  
+
+### 🧱 Architecture
+- Added new subprojects:  
+  ```
+  src/
+    TokenFlow.Core/
+    TokenFlow.AI/
+    TokenFlow.Tools/
+    TokenFlow.Tools.Benchmarks/
+  tests/
+    TokenFlow.Core.Tests/
+    TokenFlow.AI.Tests/
+    TokenFlow.Tools.Tests/
+  ```
+- Unified structure across build, test, and benchmark pipelines  
+- Solidified CLI as developer utility layer (non-public NuGet target)
 
 ---
 
