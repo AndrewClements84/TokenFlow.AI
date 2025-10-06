@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenFlow.AI.Tests", "tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenFlow.Tools.Tests", "tests\TokenFlow.Tools.Tests\TokenFlow.Tools.Tests.csproj", "{D81C4456-A10A-4302-9E04-F7BAA6498DE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenFlow.Tools.Benchmarks", "src\TokenFlow.Tools.Benchmarks\TokenFlow.Tools.Benchmarks.csproj", "{A062E12F-D4B1-4B66-B1A0-870809183C56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{D81C4456-A10A-4302-9E04-F7BAA6498DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D81C4456-A10A-4302-9E04-F7BAA6498DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D81C4456-A10A-4302-9E04-F7BAA6498DE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A062E12F-D4B1-4B66-B1A0-870809183C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A062E12F-D4B1-4B66-B1A0-870809183C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A062E12F-D4B1-4B66-B1A0-870809183C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A062E12F-D4B1-4B66-B1A0-870809183C56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{1272715B-C868-44A2-A1FA-F882D7E83430} = {8E9D0AFF-649A-4D81-90BD-4483D9895570}
 		{3ACD5C26-58C3-4787-9B77-83A83B9293FC} = {8E9D0AFF-649A-4D81-90BD-4483D9895570}
 		{D81C4456-A10A-4302-9E04-F7BAA6498DE9} = {8E9D0AFF-649A-4D81-90BD-4483D9895570}
+		{A062E12F-D4B1-4B66-B1A0-870809183C56} = {CFAD162F-9A90-42FE-B661-15B5AD50F80C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2EA6834-97C5-4177-83D5-8C8D1362BAD1}
