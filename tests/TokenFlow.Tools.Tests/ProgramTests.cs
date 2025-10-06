@@ -38,7 +38,7 @@ namespace TokenFlow.Tools.Tests
                 Assert.Equal(0, result);
             });
 
-            Assert.Contains("Token count", output);
+            Assert.Contains("Tokens:", output);
         }
 
         [Fact]

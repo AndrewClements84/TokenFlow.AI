@@ -1,7 +1,47 @@
 ﻿[
-  { "Id": "gpt-4o",       "Family": "openai",   "TokenizerName": "approx", "MaxInputTokens": 128000, "MaxOutputTokens": 4096, "InputCostPer1K": 0.01,  "OutputCostPer1K": 0.03 },
-  { "Id": "gpt-4o-mini",  "Family": "openai",   "TokenizerName": "approx", "MaxInputTokens": 128000, "MaxOutputTokens": 4096, "InputCostPer1K": 0.002, "OutputCostPer1K": 0.006 },
-  { "Id": "gpt-5o",       "Family": "openai",   "TokenizerName": "approx", "MaxInputTokens": 200000, "MaxOutputTokens": 8192, "InputCostPer1K": 0.015, "OutputCostPer1K": 0.045 },
-  { "Id": "claude-3-opus", "Family": "anthropic","TokenizerName": "approx", "MaxInputTokens": 200000, "MaxOutputTokens": 4096, "InputCostPer1K": 0.008, "OutputCostPer1K": 0.024 },
-  { "Id": "gemini-1.5-pro","Family": "google",  "TokenizerName": "approx", "MaxInputTokens": 128000, "MaxOutputTokens": 8192, "InputCostPer1K": 0.005, "OutputCostPer1K": 0.015 }
+  {
+    "Id": "gpt-4o",
+    "Family": "openai",
+    "TokenizerName": "approx",
+    "MaxInputTokens": 128000,
+    "MaxOutputTokens": 4096,
+    "InputPricePer1K": 0.01,
+    "OutputPricePer1K": 0.03
+  },
+  {
+    "Id": "gpt-4o-mini",
+    "Family": "openai",
+    "TokenizerName": "approx",
+    "MaxInputTokens": 128000,
+    "MaxOutputTokens": 4096,
+    "InputPricePer1K": 0.005,
+    "OutputPricePer1K": 0.015
+  },
+  {
+    "Id": "gpt-5o",
+    "Family": "openai",
+    "TokenizerName": "approx",
+    "MaxInputTokens": 200000,
+    "MaxOutputTokens": 8192,
+    "InputPricePer1K": 0.02,
+    "OutputPricePer1K": 0.06
+  },
+  {
+    "Id": "claude-3-opus",
+    "Family": "anthropic",
+    "TokenizerName": "approx",
+    "MaxInputTokens": 200000,
+    "MaxOutputTokens": 4096,
+    "InputPricePer1K": 0.008,
+    "OutputPricePer1K": 0.024
+  },
+  {
+    "Id": "gemini-1.5-pro",
+    "Family": "google",
+    "TokenizerName": "approx",
+    "MaxInputTokens": 128000,
+    "MaxOutputTokens": 8192,
+    "InputPricePer1K": 0.01,
+    "OutputPricePer1K": 0.03
+  }
 ]

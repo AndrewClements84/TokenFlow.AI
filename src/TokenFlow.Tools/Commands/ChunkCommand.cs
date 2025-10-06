@@ -1,6 +1,7 @@
 ﻿using System;
 using TokenFlow.AI.Chunking;
 using TokenFlow.AI.Tokenizer;
+using TokenFlow.AI.Registry;
 
 namespace TokenFlow.Tools.Commands
 {
@@ -14,10 +15,12 @@ namespace TokenFlow.Tools.Commands
                 return 1;
             }
 
+            var registry = new ModelRegistry();
+            Console.WriteLine($"[TokenFlow.AI] Using model registry source: {registry.LoadSource}");
+
             var tokenizer = new ApproxTokenizer();
             var chunker = new TokenChunker(tokenizer);
 
-            // TODO: wire real options later; these are sensible defaults for now
             var chunks = chunker.ChunkByTokens(text, 100, 10);
             int index = 1;
 
@@ -27,9 +30,10 @@ namespace TokenFlow.Tools.Commands
                 Console.WriteLine($"Chunk {index++}: {preview}...");
             }
 
-            Console.WriteLine("Total chunks: " + chunks.Count);
+            Console.WriteLine($"Total chunks: {chunks.Count}");
             return 0;
         }
     }
 }
+
 

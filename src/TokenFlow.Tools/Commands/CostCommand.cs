@@ -15,6 +15,8 @@ namespace TokenFlow.Tools.Commands
             }
 
             var registry = new ModelRegistry();
+            Console.WriteLine($"[TokenFlow.AI] Using model registry source: {registry.LoadSource}");
+
             var client = new TokenFlowClient("gpt-4o");
             var result = client.AnalyzeText(text);
 
@@ -24,4 +26,5 @@ namespace TokenFlow.Tools.Commands
         }
     }
 }
+
 
