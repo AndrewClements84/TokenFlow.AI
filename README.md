@@ -16,7 +16,7 @@
 
 **TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT‑4o, Anthropic Claude, and Azure OpenAI.
 
-It serves as the **core engine** of the *Flow.AI* ecosystem — providing accurate token counting, intelligent text splitting, and real‑time cost tracking for any AI‑driven application.
+It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real‑time cost estimation for any AI‑driven application.
 
 ---
 
@@ -25,10 +25,10 @@ It serves as the **core engine** of the *Flow.AI* ecosystem — providing accura
 - 🔢 GPT‑style **token counting** for .NET  
 - 🧱 Smart **text chunking** with configurable token limits and overlap  
 - 💰 Real‑time **cost estimation** for prompt and completion usage  
+- 🧮 **TokenUsageTracker** — track cumulative token and cost usage across analyses  
+- 🧩 Unified **TokenFlowClient** for developers — analyze, chunk, and cost in one API  
 - 🔌 Pluggable **tokenizer providers** (OpenAI, Anthropic, Azure AI)  
-- 🧮 Unified **TokenFlowClient** for developers — analyze, chunk, and cost in one API  
 - 📦 **Zero external dependencies** — small, fast, and portable  
-- 🧠 Designed to integrate with **PromptStream.AI**, **DataFlow.AI**, and **ReasonFlow.AI**
 
 ---
 
@@ -46,7 +46,7 @@ dotnet add package TokenFlow.Core
 
 ---
 
-### 🧠 Quick Example
+### 🧠 Quick Examples
 
 **Token analysis and cost estimation:**
 
@@ -70,24 +70,21 @@ foreach (var chunk in chunks)
     Console.WriteLine($"Chunk: {chunk.Substring(0, Math.Min(40, chunk.Length))}...");
 ```
 
----
+**Tracking cumulative usage:**
 
-### 🧩 Example Architecture
+```csharp
+using TokenFlow.AI.Tracking;
 
-```
-TokenFlow.AI
-├─ Client/
-│  ├─ ITokenFlowClient.cs
-│  └─ TokenFlowClient.cs
-├─ Chunking/
-│  ├─ ITextChunker.cs
-│  └─ TokenChunker.cs
-├─ Tokenizer/
-│  └─ ApproxTokenizer.cs
-├─ Costing/
-│  └─ CostEstimator.cs
-└─ Registry/
-   └─ ModelRegistry.cs
+var tracker = new TokenUsageTracker(client.GetModel());
+
+tracker.Record(client.AnalyzeText("Hello TokenFlow.AI!"));
+tracker.Record(client.AnalyzeText("Let's track token usage across sessions."));
+
+var summary = tracker.GetSummary();
+
+Console.WriteLine($"Analyses: {summary.AnalysisCount}");
+Console.WriteLine($"Total Tokens: {summary.TotalTokens}");
+Console.WriteLine($"Total Cost: £{summary.TotalCost:F4}");
 ```
 
 ---
@@ -103,19 +100,6 @@ Code coverage is tracked with **Codecov**, and the project maintains **100% line
 
 ---
 
-### 🧭 Part of the Flow.AI Ecosystem
-
-| Package | Purpose |
-|----------|----------|
-| 🧠 **TokenFlow.AI** | Core tokenization, chunking & cost estimation |
-| 💬 **PromptStream.AI** | Prompt composition & validation |
-| 📊 **DataFlow.AI** | Data ingestion & structured streaming pipelines |
-| 🧩 **ReasonFlow.AI** | Logical reasoning & multi-step thought orchestration |
-| 🧬 **ModelFlow.AI** | Unified model abstraction & configuration registry |
-| 💭 **ChatFlow.AI** | Conversational orchestration & dialogue state management |
-
----
-
 ### 🛠️ Roadmap
 
 #### ✅ Completed
@@ -123,30 +107,28 @@ Code coverage is tracked with **Codecov**, and the project maintains **100% line
 - [x] Implemented `ApproxTokenizer`, `CostEstimator`, and `ModelRegistry`
 - [x] Added `TokenChunker` with overlap support
 - [x] Added `TokenFlowClient` — unified entry point for developers
+- [x] Added `TokenUsageTracker` — cumulative cost and token tracking
 - [x] Full xUnit test suite with **100% code coverage**
 - [x] CI/CD pipeline with Codecov and automated NuGet publishing
 - [x] Dual targeting for **.NET Standard 2.0** and **.NET 8.0**
 
 #### 🚧 In Progress
-- [ ] Introduce `TokenUsageTracker` for cumulative cost tracking
 - [ ] Implement `ITokenizerFactory` for dynamic tokenizer resolution
 - [ ] Extend `ModelRegistry` to support JSON configuration loading
 - [ ] CLI utilities via **TokenFlow.Tools**
 - [ ] Benchmark suite using BenchmarkDotNet
 
 #### 🌟 Future Goals
-- [ ] Integration with **PromptStream.AI** for prompt budget validation
-- [ ] Integration with **DataFlow.AI** for token-based stream segmentation
 - [ ] Advanced tokenizers (OpenAI tiktoken, Claude tokenizer)
 - [ ] Developer documentation & sample apps
-- [ ] Public release under Flow.AI brand umbrella
+- [ ] Integration with other Flow.AI components once public
 
 ---
 
 ### 💬 Contributing
 
 Pull requests are welcome!  
-If you’d like to contribute to the **Flow.AI** ecosystem, please read the upcoming `CONTRIBUTING.md` once published.
+If you’d like to contribute to **TokenFlow.AI**, please read the upcoming `CONTRIBUTING.md` once published.
 
 ---
 
@@ -158,4 +140,4 @@ See [`LICENSE`](LICENSE) for details.
 ---
 
 > ⭐ **If you find TokenFlow.AI useful, please give the repository a star on GitHub!**  
-> It helps others discover the Flow.AI ecosystem and supports ongoing development.
+> It helps others discover the project and supports ongoing development.
