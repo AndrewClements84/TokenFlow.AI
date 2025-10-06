@@ -16,7 +16,8 @@
 
 **TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT‑4o, Anthropic Claude, and Azure OpenAI.
 
-It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real‑time cost estimation for any AI‑driven application.
+It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real‑time cost estimation for any AI‑driven application.  
+Now includes CLI utilities and performance benchmarking to support development workflows.
 
 ---
 
@@ -26,9 +27,12 @@ It provides accurate token counting, intelligent text splitting, cumulative usag
 - 🧱 Smart **text chunking** with configurable token limits and overlap  
 - 💰 Real‑time **cost estimation** for prompt and completion usage  
 - 🧮 **TokenUsageTracker** — track cumulative token and cost usage across analyses  
-- 🧩 Unified **TokenFlowClient** for developers — analyze, chunk, and cost in one API  
+- 🧩 Unified **TokenFlowClient** — analyze, chunk, and cost in one API  
+- ⚙️ **CLI utilities (TokenFlow.Tools)** for quick token and cost analysis via terminal  
+- 🧾 **Benchmark suite** powered by BenchmarkDotNet  
 - 🔌 Pluggable **tokenizer providers** (OpenAI, Anthropic, Azure AI)  
-- 📦 **Zero external dependencies** — small, fast, and portable  
+- 📦 **Zero external dependencies** — small, fast, portable  
+- 🧠 Dual targeting for **.NET Standard 2.0** and **.NET 8.0**  
 
 ---
 
@@ -87,6 +91,14 @@ Console.WriteLine($"Total Tokens: {summary.TotalTokens}");
 Console.WriteLine($"Total Cost: £{summary.TotalCost:F4}");
 ```
 
+**Running via CLI:**
+
+```bash
+dotnet run --project src/TokenFlow.Tools -- count "Hello TokenFlow!"
+dotnet run --project src/TokenFlow.Tools -- chunk "Large text body here..."
+dotnet run --project src/TokenFlow.Tools -- cost "Estimate cost of this text."
+```
+
 ---
 
 ### 🧪 Running Tests
@@ -109,20 +121,22 @@ Code coverage is tracked with **Codecov**, and the project maintains **100% line
 - [x] Added `TokenFlowClient` — unified entry point for developers
 - [x] Added `TokenUsageTracker` — cumulative cost and token tracking
 - [x] Implemented `ITokenizerFactory` for dynamic tokenizer resolution 
+- [x] Added **TokenFlow.Tools** — developer CLI utilities
+- [x] Added **TokenFlow.Tools.Benchmarks** — BenchmarkDotNet performance suite
 - [x] Full xUnit test suite with **100% code coverage**
 - [x] CI/CD pipeline with Codecov and automated NuGet publishing
 - [x] Dual targeting for **.NET Standard 2.0** and **.NET 8.0**
 
-
 #### 🚧 In Progress
 - [ ] Extend `ModelRegistry` to support JSON configuration loading
-- [ ] CLI utilities via **TokenFlow.Tools**
-- [ ] Benchmark suite using BenchmarkDotNet
+- [ ] Developer documentation site (API + usage guides)
+- [ ] Expand CLI commands and options
 
 #### 🌟 Future Goals
 - [ ] Advanced tokenizers (OpenAI tiktoken, Claude tokenizer)
-- [ ] Developer documentation & sample apps
 - [ ] Integration with other Flow.AI components once public
+- [ ] Performance regression tracking in CI
+- [ ] Public release under Flow.AI ecosystem
 
 ---
 
