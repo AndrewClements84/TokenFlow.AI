@@ -16,22 +16,7 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [0.3.1] — 2025-10-06
-### 🧩 Packaging & CI/CD Fixes
-- Fixed NuGet workflow to **only publish intended packages** (`TokenFlow.AI` and `TokenFlow.Core`)
-- Updated GitHub Actions workflow to pack projects explicitly instead of the full solution
-- Marked internal libraries (`TokenFlow.Tools`, `TokenFlow.Tokenizers`) as `<IsPackable>false>`
-- Ensured version metadata (`<Version>0.3.0</Version>`) is respected across builds
-- Verified release pipeline builds cleanly for **.NET Standard 2.0** and **.NET 8.0** targets
-
-### 🧹 Cleanup
-- Unlisted unintended packages from NuGet.org
-- Improved artifact output organization under `/artifacts`
-- Retained 100% test coverage and Codecov integration after pipeline update
-
----
-
-## [0.3.0] — 2025-10-05
+## [0.3.0] — 2025-10-06
 ### ✨ New Features
 - Introduced **TokenFlowClient** — unified high-level API for token counting, chunking, and cost estimation
 - Added **TokenAnalysisResult** model to standardize analysis outputs
