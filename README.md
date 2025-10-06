@@ -108,12 +108,13 @@ Code coverage is tracked with **Codecov**, and the project maintains **100% line
 - [x] Added `TokenChunker` with overlap support
 - [x] Added `TokenFlowClient` — unified entry point for developers
 - [x] Added `TokenUsageTracker` — cumulative cost and token tracking
+- [x] Implemented `ITokenizerFactory` for dynamic tokenizer resolution 
 - [x] Full xUnit test suite with **100% code coverage**
 - [x] CI/CD pipeline with Codecov and automated NuGet publishing
 - [x] Dual targeting for **.NET Standard 2.0** and **.NET 8.0**
 
+
 #### 🚧 In Progress
-- [ ] Implement `ITokenizerFactory` for dynamic tokenizer resolution
 - [ ] Extend `ModelRegistry` to support JSON configuration loading
 - [ ] CLI utilities via **TokenFlow.Tools**
 - [ ] Benchmark suite using BenchmarkDotNet
