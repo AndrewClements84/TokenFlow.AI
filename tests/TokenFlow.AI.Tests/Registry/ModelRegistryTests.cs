@@ -91,5 +91,91 @@ namespace TokenFlow.AI.Tests.Registry
             Assert.False(found);
             Assert.Null(model);
         }
+
+        [Fact]
+        public void Register_ShouldIgnore_NullModel()
+        {
+            var registry = new ModelRegistry();
+
+            // Act
+            registry.Register(null);
+
+            // Assert
+            var models = registry.GetAll();
+            Assert.NotEmpty(models); // defaults still exist
+            Assert.Contains(models, m => m.Id == "gpt-4o");
+        }
+
+        [Fact]
+        public void Register_ShouldIgnore_ModelWithEmptyId()
+        {
+            var registry = new ModelRegistry();
+            var invalid = new ModelSpec("", "test", "approx", 10, 5, 0.1m, 0.2m);
+
+            registry.Register(invalid);
+
+            var found = registry.GetById("");
+            Assert.Null(found);
+        }
+
+        [Fact]
+        public void GetAll_ShouldReturn_ReadOnlyList()
+        {
+            var registry = new ModelRegistry();
+            var models = registry.GetAll();
+
+            Assert.NotNull(models);
+            Assert.NotEmpty(models);
+
+            // Verify immutability by ensuring it cannot be cast back and modified
+            var asList = models as List<ModelSpec>;
+            Assert.Null(asList); // Should not be an underlying List<ModelSpec>
+
+            // Verify that adding would throw if attempted
+            Assert.ThrowsAny<NotSupportedException>(() =>
+            {
+                var collection = (System.Collections.IList)models;
+                collection.Add(new ModelSpec("test", "test", "approx", 1, 1, 0.1m, 0.2m));
+            });
+        }
+
+        [Fact]
+        public void LoadFromJsonString_ShouldIgnore_NullOrEmpty()
+        {
+            var registry = new ModelRegistry();
+
+            registry.LoadFromJsonString(null);
+            registry.LoadFromJsonString(string.Empty);
+            registry.LoadFromJsonString("   ");
+
+            // Assert: defaults remain unchanged
+            var model = registry.GetById("gpt-4o");
+            Assert.NotNull(model);
+        }
+
+        [Fact]
+        public void LoadFromJsonString_ShouldIgnore_NullDeserializationResult()
+        {
+            var registry = new ModelRegistry();
+
+            // Passing "null" literal as JSON results in null deserialization
+            registry.LoadFromJsonString("null");
+
+            var existing = registry.GetById("gpt-4o");
+            Assert.NotNull(existing);
+        }
+
+        [Fact]
+        public void LoadFromJsonFile_ShouldIgnore_NullOrWhitespacePath()
+        {
+            var registry = new ModelRegistry();
+
+            registry.LoadFromJsonFile(null);
+            registry.LoadFromJsonFile("");
+            registry.LoadFromJsonFile("   ");
+
+            // Still have default models
+            Assert.NotNull(registry.GetById("gpt-4o"));
+        }
     }
 }
