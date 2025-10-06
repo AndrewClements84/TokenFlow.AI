@@ -21,11 +21,10 @@ namespace TokenFlow.Tools.Commands
             var chunks = chunker.ChunkByTokens(text, 100, 10);
             int index = 1;
 
-            for (int i = 0; i < chunks.Count; i++)
+            foreach (var chunk in chunks)
             {
-                var c = chunks[i];
-                var preview = c.Text.Substring(0, Math.Min(50, c.Text.Length));
-                Console.WriteLine("Chunk " + (index++) + ": " + preview + "...");
+                var preview = chunk.Text.Substring(0, Math.Min(50, chunk.Text.Length));
+                Console.WriteLine($"Chunk {index++}: {preview}...");
             }
 
             Console.WriteLine("Total chunks: " + chunks.Count);
