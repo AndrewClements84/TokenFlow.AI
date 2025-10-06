@@ -1,5 +1,9 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+# .NET Build, Test & Publish Workflow
+# ----------------------------------
+# This workflow builds, tests, and publishes TokenFlow packages.
+# - Runs on push/PR to master or main.
+# - Publishes to NuGet only when a semantic version tag (vX.Y.Z) is pushed.
+# - Includes Codecov reporting and benchmark smoke verification.
 
 name: .NET Build, Test & Publish
 
@@ -7,13 +11,13 @@ on:
   push:
     branches: [ master, main ]
     tags:
-      - 'v*.*.*'       # Triggers publish on semantic version tags
+      - 'v*.*.*'       # Publish only on version tags
   pull_request:
     branches: [ master, main ]
 
 jobs:
   build:
-    name: Build & Test
+    name: 🧪 Build, Test & Verify
     runs-on: ubuntu-latest
 
     steps:
@@ -36,11 +40,15 @@ jobs:
       - name: 📦 Restore dependencies
         run: dotnet restore TokenFlow.AI.sln
 
-      - name: 🏗️ Build solution
+      - name: 🏗️ Build all projects
         run: dotnet build TokenFlow.AI.sln --no-restore --configuration Release
 
-      - name: 🧪 Run tests
+      - name: 🧪 Run all tests (including Tools.Tests)
         run: dotnet test TokenFlow.AI.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
+
+      - name: 🧮 Verify benchmarks compile
+        run: dotnet run --project src/TokenFlow.Tools.Benchmarks/TokenFlow.Tools.Benchmarks.csproj -c Release -- --list
+        continue-on-error: true
 
       - name: 📊 Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -60,7 +68,7 @@ jobs:
         run: echo "❌ Build or tests failed."
 
   publish:
-    name: 📦 Publish NuGet Packages
+    name: 🚀 Publish TokenFlow Packages
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
@@ -80,13 +88,13 @@ jobs:
       - name: 🏗️ Build in Release mode
         run: dotnet build TokenFlow.AI.sln --configuration Release --no-restore
 
-      # Only pack TokenFlow.AI and TokenFlow.Core
+      # Pack only public libraries
       - name: 📦 Pack TokenFlow.Core
         run: dotnet pack src/TokenFlow.Core/TokenFlow.Core.csproj --configuration Release --no-build -o ./artifacts
 
       - name: 📦 Pack TokenFlow.AI
         run: dotnet pack src/TokenFlow.AI/TokenFlow.AI.csproj --configuration Release --no-build -o ./artifacts
 
+      # Push to NuGet only for tagged versions
       - name: 🚀 Publish to NuGet (only on tagged release)
         run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
-
