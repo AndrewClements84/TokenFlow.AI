@@ -138,5 +138,38 @@ namespace TokenFlow.Tools.Tests
 
             Assert.Contains("Foo", output); // proves fallback path was executed
         }
+
+        [Fact]
+        public void Write_ShouldExecuteDefaultDataToStringFallback()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            // Custom object whose ToString is unique so coverage sees it executed
+            var obj = new CustomToStringObject();
+            OutputFormatter.Write(obj, "unknown-format"); // triggers "_ => data?.ToString() ?? string.Empty"
+            var output = sw.ToString();
+
+            Assert.Contains("I came from ToString()", output);
+        }
+
+        [Fact]
+        public void SafeToString_ShouldExecuteDefaultValueToStringFallback()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var obj = new { Weird = new CustomToStringObject() };
+            OutputFormatter.Write(obj, "table"); // triggers "_ => value.ToString() ?? """ inside SafeToString
+            var output = sw.ToString();
+
+            Assert.Contains("I came from ToString()", output);
+        }
+
+        private class CustomToStringObject
+        {
+            public override string ToString() => "I came from ToString()";
+        }
+
     }
 }
