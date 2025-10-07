@@ -7,7 +7,7 @@ Use the navigation sidebar or links below to explore:
 - [🚀 Getting Started](getting-started.html)
 - [⚙️ CLI Usage](cli-usage.html)
 - [🧩 Model Registry](model-registry.html)
-- [🔢 Tokenization](tokenization.html)
+- [🔢 Tokenization](tokenizers.html)
 - [💰 Cost Tracking](cost-tracking.html)
 - [🤝 Contributing](contributing.html)
 
