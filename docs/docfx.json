@@ -1,0 +1,27 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "../src/TokenFlow.AI/**/*.csproj" ]
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "content": [
+      { "files": [ "**/*.md" ] },
+      { "files": [ "api/**.yml" ] }
+    ],
+    "resource": [
+      { "files": [ "images/**" ] }
+    ],
+    "globalMetadata": {
+      "_appTitle": "TokenFlow.AI Documentation",
+      "_enableSearch": true
+    },
+    "dest": "_site",
+    "markdownEngineName": "markdig"
+  }
+}
