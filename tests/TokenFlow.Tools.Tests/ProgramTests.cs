@@ -70,5 +70,47 @@
             Assert.Equal(1, exitCode);
             Assert.Contains("Usage:", output);
         }
+
+        [Fact]
+        public void Main_ShouldCreateRegistry_WhenUsingRegistryArg()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var args = new[] { "analyze", "Hello", "--registry", "embedded" };
+            var exitCode = Program.Main(args);
+            var output = sw.ToString();
+
+            Assert.Equal(0, exitCode);
+            Assert.Contains("Model:", output);
+        }
+
+        [Fact]
+        public void Main_ShouldRunCostCommand()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var args = new[] { "cost", "Hello world" };
+            var exitCode = Program.Main(args);
+            var output = sw.ToString();
+
+            Assert.Equal(0, exitCode);
+            Assert.Contains("Estimated cost", output);
+        }
+
+        [Fact]
+        public void Main_ShouldRunChunkCommand()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var args = new[] { "chunk", "Hello world" };
+            var exitCode = Program.Main(args);
+            var output = sw.ToString();
+
+            Assert.Equal(0, exitCode);
+            Assert.Contains("Chunk", output);
+        }
     }
 }

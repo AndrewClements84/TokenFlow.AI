@@ -53,6 +53,19 @@ namespace TokenFlow.Tools.Tests
             Assert.Equal(1, exitCode);
             Assert.Contains("Please provide text to analyze", output);
         }
+
+        [Fact]
+        public void Run_ShouldCreateRegistry_WhenRegistryIsNull()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var exitCode = AnalyzeCommand.Run("Hello world", null, "table", "gpt-4o");
+
+            var output = sw.ToString();
+            Assert.Equal(0, exitCode);
+            Assert.Contains("Model:", output);
+        }
     }
 }
 

@@ -47,6 +47,34 @@ namespace TokenFlow.Tools.Tests
             Assert.Equal(1, exitCode);
             Assert.Contains("Please provide text to compare models with", output);
         }
+
+        [Fact]
+        public void Run_ShouldCreateRegistry_WhenRegistryIsNull()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var models = new[] { "gpt-4o" };
+            var exitCode = CompareCommand.Run("Hello world", models, null);
+            var output = sw.ToString();
+
+            Assert.Equal(0, exitCode);
+            Assert.Contains("Comparing", output);
+        }
+
+        [Fact]
+        public void Run_ShouldHandleModelError_Gracefully()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var models = new[] { "nonexistent-model" }; // will trigger exception
+            var exitCode = CompareCommand.Run("Hello world", models, new ModelRegistry());
+            var output = sw.ToString();
+
+            Assert.Equal(0, exitCode); // still returns success (handled gracefully)
+            Assert.Contains("ERROR:", output);
+        }
     }
 }
 
