@@ -8,9 +8,31 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 ### 🚧 In Progress
-- Developer documentation site (API + usage guides)
 - Expand CLI command options and argument handling
 - Add advanced tokenizer providers (OpenAI `tiktoken`, Anthropic `Claude`)
+
+---
+
+## [0.3.6] — 2025-10-08
+### 📘 Documentation
+- Added **developer documentation site** generated with **DocFX**, hosted via **GitHub Pages**
+- Created structured `/docs` folder including:
+  - Getting Started
+  - CLI Usage
+  - Model Registry
+  - Tokenization
+  - Cost Tracking
+  - Contributing
+- Integrated **automated deployment** using GitHub Actions (`docs.yml`)
+- Added **Docs badge** and link in `README.md`
+- Verified site live at [https://andrewclements84.github.io/TokenFlow.AI/](https://andrewclements84.github.io/TokenFlow.AI/)
+- Updated `README.md` roadmap (moved "Developer documentation site" to ✅ Completed)
+
+### 🧹 Improvements
+- Refined **DocFX config** (`docfx.json`) with homepage and index support
+- Updated **README.md** with new usage examples (`ModelRegistry.LoadFromJsonString`)
+- Verified full pipeline including CI/CD, Codecov, and Docs deployment
+- Minor formatting and consistency improvements
 
 ---
 
