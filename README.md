@@ -29,7 +29,7 @@ Now includes CLI utilities, developer documentation, and performance benchmarkin
 - 💰 Real‑time **cost estimation** for prompt and completion usage  
 - 🧮 **TokenUsageTracker** — track cumulative token and cost usage across analyses  
 - 🧩 Unified **TokenFlowClient** — analyze, chunk, and cost in one API  
-- ⚙️ **CLI utilities (TokenFlow.Tools)** for quick token and cost analysis via terminal  
+- ⚙️ **CLI utilities (TokenFlow.Tools)** — structured automation with `--format`, `--input`, and `--output` options  
 - 📘 **Developer documentation site** — API reference + usage guides via [GitHub Pages](https://andrewclements84.github.io/TokenFlow.AI/)  
 - 🧾 **Benchmark suite** powered by BenchmarkDotNet  
 - 🔌 Pluggable **tokenizer providers** (OpenAI, Anthropic, Azure AI)  
@@ -99,18 +99,26 @@ Console.WriteLine($"Total Cost: £{summary.TotalCost:F4}");
 using TokenFlow.AI.Registry;
 
 var registry = new ModelRegistry();
-registry.LoadFromJsonString("[{ "Id": "custom-model", "Family": "openai", "TokenizerName": "tiktoken", "MaxInputTokens": 10000, "MaxOutputTokens": 2000, "InputPricePer1K": 0.01, "OutputPricePer1K": 0.02 }]");
+registry.LoadFromJsonString("[{ \"Id\": \"custom-model\", \"Family\": \"openai\", \"TokenizerName\": \"tiktoken\", \"MaxInputTokens\": 10000, \"MaxOutputTokens\": 2000, \"InputPricePer1K\": 0.01, \"OutputPricePer1K\": 0.02 }]");
 
 var model = registry.TryGet("custom-model");
 Console.WriteLine($"{model.Id}: {model.Family} — {model.MaxInputTokens} tokens");
 ```
 
-**Running via CLI:**
+**Running via CLI (v2.1):**
 
 ```bash
-dotnet run --project src/TokenFlow.Tools -- count "Hello TokenFlow!"
-dotnet run --project src/TokenFlow.Tools -- chunk "Large text body here..."
-dotnet run --project src/TokenFlow.Tools -- cost "Estimate cost of this text."
+# Human-readable table output
+dotnet run --project src/TokenFlow.Tools -- analyze "Hello TokenFlow!"
+
+# JSON output
+dotnet run --project src/TokenFlow.Tools -- analyze "Hello" --format json
+
+# CSV output to file
+dotnet run --project src/TokenFlow.Tools -- analyze "Hello" --format csv --output result.csv
+
+# Quiet mode for CI/CD
+dotnet run --project src/TokenFlow.Tools -- analyze "Quiet test" --format quiet
 ```
 
 ---
@@ -142,9 +150,7 @@ Code coverage is tracked with **Codecov**, and the project maintains **100% line
 - [x] Dual targeting for **.NET Standard 2.0** and **.NET 8.0**
 - [x] Extended `ModelRegistry` to support JSON configuration loading ✅
 - [x] Developer documentation site (API + usage guides) ✅
-
-#### 🚧 In Progress
-- [ ] Expand CLI commands and options
+- [x] Expanded CLI commands and options (`--format`, `--input`, `--output`, `--quiet`, CSV + table formatting) ✅
 
 #### 🌟 Future Goals
 - [ ] Advanced tokenizers (OpenAI tiktoken, Claude tokenizer)
