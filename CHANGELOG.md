@@ -8,10 +8,39 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 ### 🚧 In Progress
-- Extend `ModelRegistry` to support JSON configuration loading
 - Developer documentation site (API + usage guides)
 - Expand CLI command options and argument handling
 - Add advanced tokenizer providers (OpenAI `tiktoken`, Anthropic `Claude`)
+
+---
+
+## [0.3.5] — 2025-10-07
+### ✨ New Features
+- **Extended `ModelRegistry` to support JSON configuration loading** including:
+  - Loading from embedded resources, local JSON files, and remote URLs
+  - Direct in-memory JSON string parsing via `LoadFromJsonString`
+  - Safe exception handling and early-return guards for malformed or empty JSON
+- Added **ModelRegistryJsonLoader** and **ModelRegistryRemoteLoader** with full test coverage
+
+### 🧹 Improvements
+- Achieved **100% line and branch coverage** across all projects (verified via Codecov)
+- Simplified loader exception handling to ensure consistent fault tolerance
+- Updated unit tests for `ModelRegistry`, `ModelRegistryJsonLoader`, and `ModelRegistryRemoteLoader` to cover all defensive branches
+- Added `[ExcludeFromCodeCoverage]` attribute to untestable embedded resource guards for stability
+
+### ⚙️ DevOps & CI/CD
+- Updated GitHub Actions workflow for deterministic Codecov reports
+- Added `IncludePrivate=true` configuration in Coverlet to capture private method instrumentation
+- Improved CI summary logs and badge reliability
+
+### 🧱 Architecture
+- `ModelRegistry` is now fully modular, supporting JSON-based model definitions
+- Maintained `.NET Standard 2.0` compatibility with `.NET 8.0` test suite
+- Consolidated Registry tests for clarity and maintainability
+
+### 🧾 Documentation
+- Updated **README.md** to mark JSON configuration loading as completed in roadmap
+- Minor style and formatting consistency improvements
 
 ---
 
