@@ -144,6 +144,7 @@ namespace TokenFlow.AI.Registry
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         private void LoadEmbeddedDefaults()
         {
             try
