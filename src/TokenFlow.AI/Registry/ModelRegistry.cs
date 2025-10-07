@@ -186,5 +186,27 @@ namespace TokenFlow.AI.Registry
                 // Ignore any console errors (e.g. ThrowingTextWriter in tests)
             }
         }
+
+        public void LoadSharedRegistryIfAvailable()
+        {
+            var sharedPath = Path.Combine(AppContext.BaseDirectory, "flow-models.json");
+
+            if (!File.Exists(sharedPath))
+                return;
+
+            try
+            {
+                LoadFromJsonFile(sharedPath);
+                if (_models.Count > 0)
+                {
+                    LoadSource = "Shared";
+                    LogSource(LoadSource, sharedPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[TokenFlow.AI] Failed to load shared registry: {ex.Message}");
+            }
+        }
     }
 }
