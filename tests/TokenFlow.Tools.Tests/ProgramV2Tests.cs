@@ -82,6 +82,29 @@ namespace TokenFlow.Tools.Tests
             Assert.Equal(0, exit);
             Assert.Contains("Usage:", output);
         }
+
+        [Fact]
+        public void Main_ShouldCatchException_WhenInputFileUnreadable()
+        {
+            var tempPath = Path.GetTempFileName();
+
+            // Lock the file so File.ReadAllText() throws
+            using var stream = new FileStream(tempPath, FileMode.Open, FileAccess.Read, FileShare.None);
+
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var args = new[] { "analyze", "--input", tempPath, "--format", "json" };
+            var exit = TokenFlow.Tools.Program.Main(args);
+
+            var output = sw.ToString();
+            Assert.Equal(1, exit);
+            Assert.Contains("Failed to read input file", output);
+
+            stream.Close();
+            File.Delete(tempPath);
+        }
+
     }
 }
 
