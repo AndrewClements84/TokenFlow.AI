@@ -41,7 +41,7 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [0.4.0] — 2025-10-01
+## [0.4.0] — 2025-10-07
 ### ✨ New Features
 - **CLI v2.1** released — expanded command-line capabilities:
   - Added `--format` options (`table`, `json`, `csv`, `quiet`)
@@ -63,7 +63,7 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [0.3.0] — 2025-09-10
+## [0.3.0] — 2025-10-06
 ### ✨ New Features
 - Added **ModelRegistry** system with JSON and remote loading capabilities.
 - Introduced **CostEstimator** for real-time cost calculations per token.
@@ -80,7 +80,7 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [0.2.0] — 2025-08-15
+## [0.2.0] — 2025-10-05
 ### ✨ New Features
 - Added **TokenFlow.Tools.Benchmarks** project powered by BenchmarkDotNet.
 - Added initial **CLI tools** project for developers.
@@ -96,7 +96,7 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [0.1.0] — 2025-07-20
+## [0.1.0] — 2025-10-05
 ### 🚀 Initial Release
 - Project initialized with **TokenFlow.AI** core logic.
 - Implemented basic `ITokenizer` interface and prototype `ApproxTokenizer`.
