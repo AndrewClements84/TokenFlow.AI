@@ -15,21 +15,22 @@
 
 ### 💡 Overview
 
-**TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT-4o, Anthropic Claude, and Azure OpenAI.
+**TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT‑4o, Anthropic Claude, and Azure OpenAI.
 
-It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real-time cost estimation for any AI-driven application.  
-Now includes CLI utilities and performance benchmarking to support development workflows.
+It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real‑time cost estimation for any AI‑driven application.  
+Now includes CLI utilities, developer documentation, and performance benchmarking.
 
 ---
 
 ### 🧩 Key Features
 
-- 🔢 GPT-style **token counting** for .NET  
+- 🔢 GPT‑style **token counting** for .NET  
 - 🧱 Smart **text chunking** with configurable token limits and overlap  
-- 💰 Real-time **cost estimation** for prompt and completion usage  
+- 💰 Real‑time **cost estimation** for prompt and completion usage  
 - 🧮 **TokenUsageTracker** — track cumulative token and cost usage across analyses  
 - 🧩 Unified **TokenFlowClient** — analyze, chunk, and cost in one API  
 - ⚙️ **CLI utilities (TokenFlow.Tools)** for quick token and cost analysis via terminal  
+- 📘 **Developer documentation site** — API reference + usage guides via [GitHub Pages](https://andrewclements84.github.io/TokenFlow.AI/)  
 - 🧾 **Benchmark suite** powered by BenchmarkDotNet  
 - 🔌 Pluggable **tokenizer providers** (OpenAI, Anthropic, Azure AI)  
 - 📦 **Zero external dependencies** — small, fast, portable  
@@ -92,6 +93,18 @@ Console.WriteLine($"Total Tokens: {summary.TotalTokens}");
 Console.WriteLine($"Total Cost: £{summary.TotalCost:F4}");
 ```
 
+**Model Registry JSON Loading:**
+
+```csharp
+using TokenFlow.AI.Registry;
+
+var registry = new ModelRegistry();
+registry.LoadFromJsonString("[{ "Id": "custom-model", "Family": "openai", "TokenizerName": "tiktoken", "MaxInputTokens": 10000, "MaxOutputTokens": 2000, "InputPricePer1K": 0.01, "OutputPricePer1K": 0.02 }]");
+
+var model = registry.TryGet("custom-model");
+Console.WriteLine($"{model.Id}: {model.Family} — {model.MaxInputTokens} tokens");
+```
+
 **Running via CLI:**
 
 ```bash
@@ -128,9 +141,9 @@ Code coverage is tracked with **Codecov**, and the project maintains **100% line
 - [x] CI/CD pipeline with Codecov and automated NuGet publishing
 - [x] Dual targeting for **.NET Standard 2.0** and **.NET 8.0**
 - [x] Extended `ModelRegistry` to support JSON configuration loading ✅
+- [x] Developer documentation site (API + usage guides) ✅
 
 #### 🚧 In Progress
-- [ ] Developer documentation site (API + usage guides)
 - [ ] Expand CLI commands and options
 
 #### 🌟 Future Goals
