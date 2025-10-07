@@ -11,7 +11,8 @@
   ],
   "build": {
     "content": [
-      { "files": [ "**/*.md" ] },
+      { "files": [ "index.md" ] },
+      { "files": [ "**/*.md" ], "exclude": [ "index.md" ] },
       { "files": [ "api/**.yml" ] }
     ],
     "resource": [
