@@ -3,13 +3,19 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
     <PackageId>TokenFlow.Core</PackageId>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>Andrew Clements</Authors>
     <Company>Andrew Clements</Company>
-    <Description>Shared interfaces and models for TokenFlow.AI — providing cross-library contracts for tokenization and cost estimation.</Description>
+    <Description>
+      TokenFlow.Core — Shared core contracts and models for TokenFlow.AI.
+      Provides interfaces, data types, and common utilities for token counting,
+      cost estimation, and model specification. Compatible with .NET Standard 2.0.
+    </Description>
+    <PackageTags>
+      tokenflow;core;interfaces;contracts;models;ai;nlp;tokenization;cost;library;openai;anthropic
+    </PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
-    <PackageTags>tokenization; core; llm; ai; .net; flow.ai</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>logo.png</PackageIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

@@ -7,14 +7,20 @@
 
     <!-- NuGet package identity -->
     <PackageId>TokenFlow.AI</PackageId>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>Andrew Clements</Authors>
     <Company>Andrew Clements</Company>
     <Product>TokenFlow.AI</Product>
 
     <!-- Package metadata -->
-    <Description>TokenFlow.AI — Core tokenization, chunking, and cost estimation utilities for .NET LLM integrations.</Description>
-    <PackageTags>tokenization; llm; openai; azure; ai; .net; flow.ai</PackageTags>
+    <Description>
+      TokenFlow.AI — A lightweight .NET library for tokenization, chunking, and cost estimation
+      across large language models such as OpenAI GPT-4o, Anthropic Claude, and Azure OpenAI.
+      Includes CLI utilities, full ModelRegistry support, and real-time cost tracking.
+    </Description>
+    <PackageTags>
+      tokenization;llm;gpt;ai;openai;anthropic;azure;nlp;tokens;cost-estimation;cli;benchmark;prompt-engineering
+    </PackageTags>
     <RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
     <PackageProjectUrl>https://github.com/AndrewClements84/TokenFlow.AI</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
