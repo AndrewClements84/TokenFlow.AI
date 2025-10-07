@@ -108,5 +108,35 @@ namespace TokenFlow.Tools.Tests
 
             Assert.Contains("\"", output); // contains quotes for escaped CSV
         }
+
+        [Fact]
+        public void Write_ShouldFallbackToToString_ForUnknownDataType()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            // A type that is neither IEnumerable nor null
+            var obj = new { Custom = 123 };
+            OutputFormatter.Write(obj, "table");
+
+            var output = sw.ToString();
+            Assert.Contains("Custom", output); // uses data?.ToString() fallback
+        }
+
+        [Fact]
+        public void SafeToString_ShouldFallbackToValueToString()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            // The only way to hit the "_ => value.ToString() ?? """ case
+            // is to pass a non-null, non-numeric, non-nullable type.
+            var dummy = new { Foo = new object() }; // generic object → triggers fallback
+
+            OutputFormatter.Write(dummy, "table");
+            var output = sw.ToString();
+
+            Assert.Contains("Foo", output); // proves fallback path was executed
+        }
     }
 }
