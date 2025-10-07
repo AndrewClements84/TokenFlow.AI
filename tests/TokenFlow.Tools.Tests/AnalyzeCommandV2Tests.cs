@@ -91,6 +91,22 @@ namespace TokenFlow.Tools.Tests
             Assert.Contains("ModelId", output);
             Assert.Contains(",", output);
         }
+
+        [Fact]
+        public void Run_ShouldCatchException_AndReturnErrorCode()
+        {
+            // Arrange
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            // Invalid model ID forces TokenFlowClient to throw or fail internally
+            var exit = AnalyzeCommand.Run("text", null, "table", modelId: "invalid_model", outputPath: null);
+            var output = sw.ToString();
+
+            // Assert
+            Assert.Equal(1, exit);
+            Assert.Contains("Error:", output);
+        }
     }
 }
 

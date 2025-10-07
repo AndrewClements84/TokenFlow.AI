@@ -246,6 +246,22 @@ namespace TokenFlow.AI.Tests.Registry
             Assert.NotEmpty(reg.GetAll());
         }
 
+        [Fact]
+        public void Constructor_Fallback_ShouldAssignEmbedded_WhenModelsExistAndLoadSourceUnknown()
+        {
+            // Arrange — invalid remote and missing file
+            var fakeUrl = new Uri("http://localhost/fake");
+            var reg = new ModelRegistry(fakeUrl, null, useEmbeddedFallback: true);
+
+            // Act — force post-condition
+            var loadSource = reg.LoadSource;
+            var count = reg.GetAll().Count;
+
+            // Assert
+            Assert.True(count > 0);
+            Assert.Equal("Embedded", loadSource);
+        }
+
         private sealed class ThrowingTextWriter : StringWriter
         {
             public override void WriteLine(string? value) => throw new InvalidOperationException("boom");
