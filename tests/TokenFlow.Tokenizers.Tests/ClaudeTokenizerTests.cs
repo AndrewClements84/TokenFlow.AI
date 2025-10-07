@@ -31,6 +31,62 @@ namespace TokenFlow.Tokenizers.Tests
             int count = tokenizer.CountTokens(messages);
             Assert.True(count > 0);
         }
+
+        [Fact]
+        public void Constructor_ShouldDefaultName_WhenModelIdIsNull()
+        {
+            var tokenizer = new ClaudeTokenizer(null);
+            Assert.Equal("claude-3-opus", tokenizer.Name);
+        }
+
+        [Fact]
+        public void CountTokens_ShouldReturnZero_WhenTextIsNullOrEmpty()
+        {
+            var tokenizer = new ClaudeTokenizer();
+            Assert.Equal(0, tokenizer.CountTokens((string)null));
+            Assert.Equal(0, tokenizer.CountTokens(string.Empty));
+        }
+
+        [Fact]
+        public void CountTokens_ShouldReturnZero_WhenMessagesIsNull()
+        {
+            var tokenizer = new ClaudeTokenizer();
+            Assert.Equal(0, tokenizer.CountTokens((IEnumerable<(string role, string content)>)null));
+        }
+
+        [Fact]
+        public void Encode_ShouldReturnEmptyArray_WhenTextIsNullOrEmpty()
+        {
+            var tokenizer = new ClaudeTokenizer();
+            var result1 = tokenizer.Encode(null);
+            var result2 = tokenizer.Encode(string.Empty);
+
+            Assert.NotNull(result1);
+            Assert.NotNull(result2);
+            Assert.Empty(result1);
+            Assert.Empty(result2);
+        }
+
+        [Fact]
+        public void Decode_ShouldReturnEmptyString_WhenTokensIsNull()
+        {
+            var tokenizer = new ClaudeTokenizer();
+            var result = tokenizer.Decode(null);
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void Decode_ShouldHandle_InvalidIntegerTokens()
+        {
+            var tokenizer = new ClaudeTokenizer();
+            var tokens = new List<string> { "abc", "123", "xyz" };
+
+            var decoded = tokenizer.Decode(tokens);
+
+            Assert.NotNull(decoded);
+            Assert.True(decoded.Length > 0);
+        }
+
     }
 }
 
