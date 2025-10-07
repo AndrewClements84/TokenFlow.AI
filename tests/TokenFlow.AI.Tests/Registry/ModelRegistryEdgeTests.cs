@@ -230,6 +230,22 @@ namespace TokenFlow.AI.Tests.Registry
             Assert.True(true);
         }
 
+        [Fact]
+        public void Constructor_ShouldSetLoadSourceToEmbedded_WhenUnknownButModelsExist_AfterFallback()
+        {
+            // Arrange: bogus URL and null local file ensure remote/local fail,
+            // but embedded fallback loads successfully.
+            var badUrl = new Uri("http://invalid.url.fake");
+            ModelRegistry reg = null;
+
+            // Act
+            reg = new ModelRegistry(badUrl, null, useEmbeddedFallback: true);
+
+            // Assert — branch reached when fallback loads models successfully
+            Assert.Equal("Embedded", reg.LoadSource);
+            Assert.NotEmpty(reg.GetAll());
+        }
+
         private sealed class ThrowingTextWriter : StringWriter
         {
             public override void WriteLine(string? value) => throw new InvalidOperationException("boom");
