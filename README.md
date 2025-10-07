@@ -14,18 +14,18 @@
 
 ### 💡 Overview
 
-**TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT‑4o, Anthropic Claude, and Azure OpenAI.
+**TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT-4o, Anthropic Claude, and Azure OpenAI.
 
-It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real‑time cost estimation for any AI‑driven application.  
+It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real-time cost estimation for any AI-driven application.  
 Now includes CLI utilities and performance benchmarking to support development workflows.
 
 ---
 
 ### 🧩 Key Features
 
-- 🔢 GPT‑style **token counting** for .NET  
+- 🔢 GPT-style **token counting** for .NET  
 - 🧱 Smart **text chunking** with configurable token limits and overlap  
-- 💰 Real‑time **cost estimation** for prompt and completion usage  
+- 💰 Real-time **cost estimation** for prompt and completion usage  
 - 🧮 **TokenUsageTracker** — track cumulative token and cost usage across analyses  
 - 🧩 Unified **TokenFlowClient** — analyze, chunk, and cost in one API  
 - ⚙️ **CLI utilities (TokenFlow.Tools)** for quick token and cost analysis via terminal  
@@ -126,9 +126,9 @@ Code coverage is tracked with **Codecov**, and the project maintains **100% line
 - [x] Full xUnit test suite with **100% code coverage**
 - [x] CI/CD pipeline with Codecov and automated NuGet publishing
 - [x] Dual targeting for **.NET Standard 2.0** and **.NET 8.0**
+- [x] Extended `ModelRegistry` to support JSON configuration loading ✅
 
 #### 🚧 In Progress
-- [ ] Extend `ModelRegistry` to support JSON configuration loading
 - [ ] Developer documentation site (API + usage guides)
 - [ ] Expand CLI commands and options
 
