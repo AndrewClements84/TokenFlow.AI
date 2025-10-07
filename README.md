@@ -1,3 +1,4 @@
+
 <p align="center">
   <img src="https://github.com/AndrewClements84/TokenFlow.AI/blob/master/assets/logo.png?raw=true" alt="TokenFlow.AI" width="500"/>
 </p>
@@ -32,8 +33,7 @@ Now includes CLI utilities, developer documentation, and performance benchmarkin
 - ⚙️ **CLI utilities (TokenFlow.Tools)** — structured automation with `--format`, `--input`, and `--output` options  
 - 📘 **Developer documentation site** — API reference + usage guides via [GitHub Pages](https://andrewclements84.github.io/TokenFlow.AI/)  
 - 🧾 **Benchmark suite** powered by BenchmarkDotNet  
-- 🔌 Pluggable **tokenizer providers** (OpenAI, Anthropic, Azure AI)  
-- 📦 **Zero external dependencies** — small, fast, portable  
+- 🔌 Pluggable **tokenizer providers** — now including OpenAI `tiktoken`, Claude `cl100k_base`, and Approx fallback  
 - 🧠 Dual targeting for **.NET Standard 2.0** and **.NET 8.0**  
 
 ---
@@ -50,76 +50,37 @@ Or install the shared core contracts:
 dotnet add package TokenFlow.Core
 ```
 
+For advanced tokenizer support:
+
+```bash
+dotnet add package TokenFlow.Tokenizers
+```
+
 ---
 
 ### 🧠 Quick Examples
 
-**Token analysis and cost estimation:**
+**Using model-specific tokenizers:**
 
 ```csharp
-using TokenFlow.AI.Client;
+using TokenFlow.Tokenizers.Factory;
 
-var client = new TokenFlowClient("gpt-4o");
-var result = client.AnalyzeText("TokenFlow.AI brings structure to prompt engineering.");
+var factory = new TokenizerFactory();
+var gptTokenizer = factory.Create("gpt-4o");
+var claudeTokenizer = factory.Create("claude-3-opus");
 
-Console.WriteLine($"Model: {result.ModelId}");
-Console.WriteLine($"Tokens: {result.TokenCount}");
-Console.WriteLine($"Estimated cost: £{result.EstimatedCost:F4}");
+Console.WriteLine($"GPT tokens: {gptTokenizer.CountTokens("Hello world!")}");
+Console.WriteLine($"Claude tokens: {claudeTokenizer.CountTokens("Hello world!")}");
 ```
 
-**Chunking long text:**
-
-```csharp
-var chunks = client.ChunkText("This is a long body of text that exceeds a given token limit...", maxTokens: 50, overlapTokens: 5);
-
-foreach (var chunk in chunks)
-    Console.WriteLine($"Chunk: {chunk.Substring(0, Math.Min(40, chunk.Length))}...");
-```
-
-**Tracking cumulative usage:**
-
-```csharp
-using TokenFlow.AI.Tracking;
-
-var tracker = new TokenUsageTracker(client.GetModel());
-
-tracker.Record(client.AnalyzeText("Hello TokenFlow.AI!"));
-tracker.Record(client.AnalyzeText("Let's track token usage across sessions."));
-
-var summary = tracker.GetSummary();
-
-Console.WriteLine($"Analyses: {summary.AnalysisCount}");
-Console.WriteLine($"Total Tokens: {summary.TotalTokens}");
-Console.WriteLine($"Total Cost: £{summary.TotalCost:F4}");
-```
-
-**Model Registry JSON Loading:**
-
-```csharp
-using TokenFlow.AI.Registry;
-
-var registry = new ModelRegistry();
-registry.LoadFromJsonString("[{ \"Id\": \"custom-model\", \"Family\": \"openai\", \"TokenizerName\": \"tiktoken\", \"MaxInputTokens\": 10000, \"MaxOutputTokens\": 2000, \"InputPricePer1K\": 0.01, \"OutputPricePer1K\": 0.02 }]");
-
-var model = registry.TryGet("custom-model");
-Console.WriteLine($"{model.Id}: {model.Family} — {model.MaxInputTokens} tokens");
-```
-
-**Running via CLI (v2.1):**
+**Benchmarking tokenizers:**
 
 ```bash
-# Human-readable table output
-dotnet run --project src/TokenFlow.Tools -- analyze "Hello TokenFlow!"
-
-# JSON output
-dotnet run --project src/TokenFlow.Tools -- analyze "Hello" --format json
-
-# CSV output to file
-dotnet run --project src/TokenFlow.Tools -- analyze "Hello" --format csv --output result.csv
-
-# Quiet mode for CI/CD
-dotnet run --project src/TokenFlow.Tools -- analyze "Quiet test" --format quiet
+dotnet run -c Release --project src/TokenFlow.Tools.Benchmarks
 ```
+
+**Full benchmark documentation:**  
+See [docs/tokenizers.md](docs/tokenizers.md)
 
 ---
 
@@ -130,7 +91,16 @@ dotnet test --no-build --verbosity normal
 ```
 
 All unit tests are written in **xUnit** and run automatically through GitHub Actions.  
-Code coverage is tracked with **Codecov**, and the project maintains **100% line and branch coverage**.
+Code coverage is tracked with **Codecov**, and the project maintains **100% line and branch coverage** across all modules.
+
+#### 📊 Code Coverage by Module
+
+| Project | Coverage | Notes |
+|----------|-----------|--------|
+| **TokenFlow.Core** | 100% | Core models and interfaces |
+| **TokenFlow.AI** | 100% | Client, costing, and registry |
+| **TokenFlow.Tokenizers** | 100% | OpenAI, Claude, and Approx implementations |
+| **TokenFlow.Tools** | 100% | CLI automation and output formatting |
 
 ---
 
@@ -138,25 +108,17 @@ Code coverage is tracked with **Codecov**, and the project maintains **100% line
 
 #### ✅ Completed
 - [x] Core interfaces and models (`ITokenizer`, `ICostEstimator`, `ModelSpec`, `TokenCountResult`)
-- [x] Implemented `ApproxTokenizer`, `CostEstimator`, and `ModelRegistry`
-- [x] Added `TokenChunker` with overlap support
-- [x] Added `TokenFlowClient` — unified entry point for developers
-- [x] Added `TokenUsageTracker` — cumulative cost and token tracking
-- [x] Implemented `ITokenizerFactory` for dynamic tokenizer resolution 
-- [x] Added **TokenFlow.Tools** — developer CLI utilities
-- [x] Added **TokenFlow.Tools.Benchmarks** — BenchmarkDotNet performance suite
-- [x] Full xUnit test suite with **100% code coverage**
-- [x] CI/CD pipeline with Codecov and automated NuGet publishing
-- [x] Dual targeting for **.NET Standard 2.0** and **.NET 8.0**
-- [x] Extended `ModelRegistry` to support JSON configuration loading ✅
+- [x] Added `TokenFlow.Tokenizers` with advanced tokenizers (`OpenAITikTokenizer`, `ClaudeTokenizer`, `ApproxTokenizer`)
+- [x] Extended `TokenizerFactory` to handle OpenAI/Claude families ✅
+- [x] Added **TokenFlow.Tools.Benchmarks** for tokenizer performance analysis ✅
+- [x] Achieved **100% code coverage** across all projects ✅
+- [x] CLI v2.1 released with structured automation ✅
 - [x] Developer documentation site (API + usage guides) ✅
-- [x] Expanded CLI commands and options (`--format`, `--input`, `--output`, `--quiet`, CSV + table formatting) ✅
 
 #### 🌟 Future Goals
-- [ ] Advanced tokenizers (OpenAI tiktoken, Claude tokenizer)
-- [ ] Integration with other Flow.AI components once public
+- [ ] Integration with additional Flow.AI ecosystem components
 - [ ] Performance regression tracking in CI
-- [ ] Public release under Flow.AI ecosystem
+- [ ] Public release under Flow.AI suite branding
 
 ---
 
