@@ -1,37 +1,57 @@
 # 🧩 ModelRegistry Overview
 
-`ModelRegistry` manages available LLM models, token limits, and pricing.
+The **ModelRegistry** manages all available language models, their token limits, and pricing metadata.  
+It provides a unified source of truth for tokenization, cost calculation, and configuration.
 
-## 💡 Features
+---
 
-- Load models from:
-  - Embedded JSON (`TokenFlow.AI.Data.models.data`)
-  - Local JSON files
-  - Remote URLs
-  - In-memory JSON strings via `LoadFromJsonString`
-- Safe exception handling and defensive fallbacks
-- Fully tested and verified (100% coverage)
+### 💡 Features
+- Load model specifications from **embedded resources**
+- Load from **local JSON files**
+- Load from **remote URLs**
+- Load directly from **in-memory JSON strings**
+- Defensive error handling and fault-tolerant loading
 
-## 🧱 Example
+---
+
+### 🧱 Example
 
 ```csharp
+using TokenFlow.AI.Registry;
+
 var registry = new ModelRegistry();
 var model = registry.TryGet("gpt-4o");
+
 Console.WriteLine($"{model.Id} supports up to {model.MaxInputTokens} tokens.");
 ```
 
-## 🧪 JSON Configuration Example
+---
 
-```json
-[
-  {
-    "Id": "gpt-4o",
-    "Family": "openai",
-    "TokenizerName": "tiktoken",
-    "MaxInputTokens": 128000,
-    "MaxOutputTokens": 4096,
-    "InputPricePer1K": 0.01,
-    "OutputPricePer1K": 0.03
-  }
-]
+### 🧾 JSON Configuration Example
+
+You can now load model metadata dynamically from a JSON string, file, or remote URL.
+
+```csharp
+using TokenFlow.AI.Registry;
+
+var registry = new ModelRegistry();
+registry.LoadFromJsonString("[{ "Id": "custom-model", "Family": "openai", "TokenizerName": "tiktoken", "MaxInputTokens": 10000, "MaxOutputTokens": 2000, "InputPricePer1K": 0.01, "OutputPricePer1K": 0.02 }]");
+
+var model = registry.TryGet("custom-model");
+Console.WriteLine($"{model.Id}: {model.Family} — {model.MaxInputTokens} tokens");
+```
+
+✅ Supports:
+- Embedded resource defaults  
+- Local file paths  
+- Remote URLs  
+- Raw in-memory JSON strings
+
+---
+
+### 🧪 Testing
+
+All registry loaders (`ModelRegistryJsonLoader`, `ModelRegistryRemoteLoader`) are covered by unit tests with 100% coverage.  
+Invalid or malformed JSON is safely ignored to ensure runtime stability.
+
 ```
