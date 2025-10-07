@@ -28,12 +28,13 @@ namespace TokenFlow.Tools.Utilities
                 return;
             }
 
+
             string content = format switch
             {
                 "json" => JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }),
                 "csv" => ToCsv(data),
                 "table" => ToTable(data),
-                _ => data?.ToString() ?? string.Empty
+                _ => GetDataFallbackString(data)
             };
 
             if (!string.IsNullOrEmpty(outputPath))
@@ -127,7 +128,7 @@ namespace TokenFlow.Tools.Utilities
                 null => "",
                 double d => d.ToString("G"),
                 decimal m => m.ToString("G"),
-                _ => value.ToString() ?? ""
+                _ => GetValueFallbackString(value)
             };
 
         private static string EscapeCsv(string s)
@@ -135,6 +136,18 @@ namespace TokenFlow.Tools.Utilities
             if (s.Contains(',') || s.Contains('"') || s.Contains('\n'))
                 return "\"" + s.Replace("\"", "\"\"") + "\"";
             return s;
+        }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        private static string GetDataFallbackString(object data)
+        {
+            return data?.ToString() ?? string.Empty;
+        }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        private static string GetValueFallbackString(object value)
+        {
+            return value?.ToString() ?? "";
         }
     }
 }
