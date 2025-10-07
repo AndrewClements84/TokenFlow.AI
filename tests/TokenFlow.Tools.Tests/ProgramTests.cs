@@ -1,70 +1,74 @@
-﻿using TokenFlow.Tools.Tests.Helpers;
-
-namespace TokenFlow.Tools.Tests
+﻿namespace TokenFlow.Tools.Tests
 {
     public class ProgramTests
     {
         [Fact]
-        public void Main_ShouldReturnError_WhenNoArguments()
+        public void Main_ShouldRunAnalyzeCommand()
         {
-            var output = TestConsoleHelper.CaptureOutput(() =>
-            {
-                int result = Program.Main(Array.Empty<string>());
-                Assert.Equal(1, result);
-            });
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
 
-            Assert.Contains("Usage: tokenflow", output);
-            Assert.Contains("Commands:", output);
+            var args = new[] { "analyze", "Hello TokenFlow!" };
+            var exitCode = Program.Main(args);
+
+            var output = sw.ToString();
+            Assert.Equal(0, exitCode);
+            Assert.Contains("Model:", output);
+        }
+
+        [Fact]
+        public void Main_ShouldRunCompareCommand()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var args = new[] { "compare", "Hello world", "--models", "gpt-4o,gpt-4o-mini" };
+            var exitCode = Program.Main(args);
+
+            var output = sw.ToString();
+            Assert.Equal(0, exitCode);
+            Assert.Contains("Comparing", output);
+        }
+
+        [Fact]
+        public void Main_ShouldRunListModelsCommand()
+        {
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            var args = new[] { "list-models" };
+            var exitCode = Program.Main(args);
+
+            var output = sw.ToString();
+            Assert.Equal(0, exitCode);
+            Assert.Contains("Models loaded from", output);
         }
 
         [Fact]
         public void Main_ShouldReturnError_ForUnknownCommand()
         {
-            var output = TestConsoleHelper.CaptureOutput(() =>
-            {
-                int result = Program.Main(new[] { "unknown" });
-                Assert.Equal(1, result);
-            });
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
 
+            var args = new[] { "invalidcmd" };
+            var exitCode = Program.Main(args);
+
+            var output = sw.ToString();
+            Assert.Equal(1, exitCode);
             Assert.Contains("Unknown command", output);
         }
 
         [Fact]
-        public void Main_ShouldInvokeCountCommand()
+        public void Main_ShouldShowUsage_WhenNoArgumentsProvided()
         {
-            var output = TestConsoleHelper.CaptureOutput(() =>
-            {
-                int result = Program.Main(new[] { "count", "Hello world" });
-                Assert.Equal(0, result);
-            });
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
 
-            Assert.Contains("Tokens:", output);
-        }
+            var exitCode = Program.Main(Array.Empty<string>());
+            var output = sw.ToString();
 
-        [Fact]
-        public void Main_ShouldInvokeChunkCommand()
-        {
-            var output = TestConsoleHelper.CaptureOutput(() =>
-            {
-                int result = Program.Main(new[] { "chunk", "TokenFlow is modular" });
-                Assert.Equal(0, result);
-            });
-
-            Assert.Contains("Chunk 1:", output);
-            Assert.Contains("Total chunks", output);
-        }
-
-        [Fact]
-        public void Main_ShouldInvokeCostCommand()
-        {
-            var output = TestConsoleHelper.CaptureOutput(() =>
-            {
-                int result = Program.Main(new[] { "cost", "Estimate this" });
-                Assert.Equal(0, result);
-            });
-
-            Assert.Contains("Tokens:", output);
-            Assert.Contains("Estimated cost", output);
+            Assert.Equal(1, exitCode);
+            Assert.Contains("Usage:", output);
         }
     }
 }
