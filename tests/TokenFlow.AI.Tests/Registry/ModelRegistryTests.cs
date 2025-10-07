@@ -196,5 +196,29 @@ namespace TokenFlow.AI.Tests.Registry
             File.Delete(tempFile);
         }
 
+        [Fact]
+        public void LoadSharedRegistryIfAvailable_ShouldTriggerOuterCatch_WhenFileLocked()
+        {
+            // Arrange
+            var tempFile = Path.Combine(AppContext.BaseDirectory, "flow-models.json");
+            File.WriteAllText(tempFile, "[{ \"Id\": \"locked-model\", \"Family\": \"openai\" }]");
+
+            var registry = new ModelRegistry();
+
+            // Lock the file to prevent reading (forces IOException)
+            using (var stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read, FileShare.None))
+            {
+                // Act — should trigger outer catch block
+                registry.LoadSharedRegistryIfAvailable();
+            }
+
+            // Assert
+            // Even though the shared registry failed to load, embedded models remain
+            Assert.Equal("Embedded", registry.LoadSource);
+            Assert.NotEmpty(registry.GetAll());
+
+            // Cleanup
+            File.Delete(tempFile);
+        }
     }
 }
