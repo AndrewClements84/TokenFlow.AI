@@ -18,19 +18,20 @@ namespace TokenFlow.AI.Registry
         /// </summary>
         public string LoadSource { get; private set; } = "Unknown";
 
+        /// <summary>
+        /// Indicates whether registry logging should be suppressed.
+        /// Controlled by environment variable TOKENFLOW_SILENT.
+        /// </summary>
+        public static bool IsSilent =>
+            string.Equals(Environment.GetEnvironmentVariable("TOKENFLOW_SILENT"), "1", StringComparison.OrdinalIgnoreCase);
+
         // === Constructors ===
 
-        /// <summary>
-        /// Default constructor – loads embedded defaults.
-        /// </summary>
         public ModelRegistry()
         {
             LoadEmbeddedDefaults();
         }
 
-        /// <summary>
-        /// Loads from a local JSON file path.
-        /// </summary>
         public ModelRegistry(string jsonPath)
         {
             LoadFromJsonFile(jsonPath);
@@ -45,9 +46,6 @@ namespace TokenFlow.AI.Registry
             }
         }
 
-        /// <summary>
-        /// Tries remote, then local, then embedded.
-        /// </summary>
         public ModelRegistry(Uri remoteUrl, string localFilePath, bool useEmbeddedFallback)
         {
             bool loaded = false;
@@ -176,7 +174,17 @@ namespace TokenFlow.AI.Registry
 
         private static void LogSource(string source, string detail)
         {
-            Console.WriteLine($"[TokenFlow.AI] Loaded model registry from {source}: {detail}");
+            if (IsSilent)
+                return; // Suppress logs in quiet/test mode
+
+            try
+            {
+                Console.WriteLine($"[TokenFlow.AI] Loaded model registry from {source}: {detail}");
+            }
+            catch
+            {
+                // Ignore any console errors (e.g. ThrowingTextWriter in tests)
+            }
         }
     }
 }
