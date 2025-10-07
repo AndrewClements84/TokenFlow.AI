@@ -54,6 +54,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
+	<ProjectReference Include="..\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

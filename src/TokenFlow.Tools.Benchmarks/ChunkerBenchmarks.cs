@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System.Linq;
 using TokenFlow.AI.Chunking;
-using TokenFlow.AI.Tokenizer;
+using TokenFlow.Tokenizers.Shared;
 
 namespace TokenFlow.Tools.Benchmarks
 {

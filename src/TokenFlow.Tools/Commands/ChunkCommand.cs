@@ -1,7 +1,7 @@
 ﻿using System;
 using TokenFlow.AI.Chunking;
-using TokenFlow.AI.Tokenizer;
 using TokenFlow.AI.Registry;
+using TokenFlow.Tokenizers.Shared;
 
 namespace TokenFlow.Tools.Commands
 {

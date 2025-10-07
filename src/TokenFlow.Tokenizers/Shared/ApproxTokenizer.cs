@@ -3,18 +3,23 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using TokenFlow.Core.Interfaces;
 
-namespace TokenFlow.AI.Tokenizer
+namespace TokenFlow.Tokenizers.Shared
 {
     /// <summary>
-    /// A simple tokenizer approximation that splits on whitespace and punctuation.
-    /// Used as a fallback when a model-specific tokenizer is not available.
+    /// A lightweight, language-agnostic tokenizer approximation that splits
+    /// on whitespace and punctuation. Acts as a fallback when a model-specific
+    /// tokenizer (e.g., OpenAI or Claude) is not available.
     /// </summary>
     public class ApproxTokenizer : ITokenizer
     {
         private static readonly Regex _splitter = new Regex(@"\w+|[^\s\w]", RegexOptions.Compiled);
 
-        public string Name { get { return "approx"; } }
+        /// <summary>
+        /// Gets the display name for this tokenizer.
+        /// </summary>
+        public string Name => "approx";
 
+        /// <inheritdoc />
         public int CountTokens(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -23,6 +28,7 @@ namespace TokenFlow.AI.Tokenizer
             return _splitter.Matches(text).Count;
         }
 
+        /// <inheritdoc />
         public int CountTokens(IEnumerable<(string role, string content)> messages)
         {
             if (messages == null)
@@ -30,12 +36,12 @@ namespace TokenFlow.AI.Tokenizer
 
             int total = 0;
             foreach (var msg in messages)
-            {
                 total += CountTokens(msg.content);
-            }
+
             return total;
         }
 
+        /// <inheritdoc />
         public IReadOnlyList<string> Encode(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -47,6 +53,7 @@ namespace TokenFlow.AI.Tokenizer
                 .ToList();
         }
 
+        /// <inheritdoc />
         public string Decode(IEnumerable<string> tokens)
         {
             if (tokens == null)
@@ -56,4 +63,3 @@ namespace TokenFlow.AI.Tokenizer
         }
     }
 }
-

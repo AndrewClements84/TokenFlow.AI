@@ -1,6 +1,6 @@
-﻿using TokenFlow.AI.Tokenizer;
+﻿using TokenFlow.Tokenizers.Shared;
 
-namespace TokenFlow.AI.Tests.Tokenizer
+namespace TokenFlow.Tokenizers.Tests
 {
     public class ApproxTokenizerTests
     {
@@ -163,6 +163,15 @@ namespace TokenFlow.AI.Tests.Tokenizer
 
             // Assert
             Assert.True(count > 3); // should split punctuation separately
+        }
+
+        [Fact]
+        public void CountTokens_ShouldIgnore_ExtraWhitespace()
+        {
+            var tokenizer = new ApproxTokenizer();
+            string text = "Hello     world   !";
+            int count = tokenizer.CountTokens(text);
+            Assert.Equal(tokenizer.Encode("Hello world !").Count, count);
         }
     }
 }

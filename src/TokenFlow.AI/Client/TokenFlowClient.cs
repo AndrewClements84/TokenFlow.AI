@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using TokenFlow.AI.Chunking;
 using TokenFlow.AI.Costing;
 using TokenFlow.AI.Registry;
-using TokenFlow.AI.Tokenizer;
 using TokenFlow.Core.Models;
+using TokenFlow.Tokenizers.Shared;
 
 namespace TokenFlow.AI.Client
 {

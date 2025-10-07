@@ -1,6 +1,7 @@
-﻿using TokenFlow.AI.Tokenizer;
+﻿using TokenFlow.Tokenizers.Factory;
+using TokenFlow.Tokenizers.Shared;
 
-namespace TokenFlow.AI.Tests.Tokenizer
+namespace TokenFlow.Tokenizers.Tests
 {
     public class TokenizerFactoryTests
     {
@@ -60,6 +61,26 @@ namespace TokenFlow.AI.Tests.Tokenizer
             factory.Register("nulltest", null);
 
             Assert.False(factory.IsRegistered("nulltest"));
+        }
+
+        [Fact]
+        public void Create_ShouldReturn_OpenAITokenizer_ForGptPrefix()
+        {
+            var factory = new TokenizerFactory();
+            var tokenizer = factory.Create("gpt-4o-mini");
+
+            Assert.NotNull(tokenizer);
+            Assert.Contains("gpt", tokenizer.Name);
+        }
+
+        [Fact]
+        public void Create_ShouldReturn_ClaudeTokenizer_ForClaudePrefix()
+        {
+            var factory = new TokenizerFactory();
+            var tokenizer = factory.Create("claude-3-opus");
+
+            Assert.NotNull(tokenizer);
+            Assert.Contains("claude", tokenizer.Name);
         }
     }
 }

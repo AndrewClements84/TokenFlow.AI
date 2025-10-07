@@ -1,5 +1,5 @@
 ﻿using TokenFlow.AI.Chunking;
-using TokenFlow.AI.Tokenizer;
+using TokenFlow.Tokenizers.Shared;
 
 namespace TokenFlow.AI.Tests.Chunking
 {

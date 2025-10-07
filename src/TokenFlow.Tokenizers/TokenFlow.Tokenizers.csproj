@@ -1,8 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<RootNamespace>TokenFlow.Tokenizers</RootNamespace>
+		<AssemblyName>TokenFlow.Tokenizers</AssemblyName>
+		<Description>Model-specific tokenizer implementations for TokenFlow.AI (OpenAI, Claude, etc.)</Description>
+		<PackageTags>AI;Tokenizer;OpenAI;Claude;LLM;TokenFlow</PackageTags>
+		<Version>0.5.0</Version>
+		<Authors>Andrew Clements</Authors>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="SharpToken" Version="1.1.2" />
+		<PackageReference Include="TiktokenSharp" Version="1.0.10" />
+	</ItemGroup>
 
 </Project>
