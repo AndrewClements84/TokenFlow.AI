@@ -54,11 +54,14 @@ jobs:
 
       - name: 🗂️ Prepare latest benchmark output
         run: |
-          FILE=$(find benchmark-results -name "*TokenizerBenchmarks-report-full.json" | head -n 1)
+          FILE=$(find benchmark-results -type f -name "*TokenizerBenchmarks-report-full*.json" | head -n 1)
           if [ -f "$FILE" ]; then
+            echo "✅ Found benchmark output: $FILE"
             cp "$FILE" benchmark-results/latest.json
           else
             echo "❌ Could not find tokenizer benchmark JSON!"
+            echo "Contents of benchmark-results for debugging:"
+            find benchmark-results -maxdepth 3 -type f
             exit 1
           fi
 
