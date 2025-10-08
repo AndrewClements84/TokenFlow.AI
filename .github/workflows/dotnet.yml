@@ -52,18 +52,37 @@ jobs:
       - name: 🧭 Run Benchmarks
         run: dotnet run -c Release --project src/TokenFlow.Tools.Benchmarks --exporters json --out benchmark-results/
 
-      - name: 🗂️ Prepare latest benchmark output
+      - name: 🗂️ Prepare latest benchmark output (merge all JSONs)
         run: |
-          FILE=$(find benchmark-results -type f -name "*TokenizerBenchmarks-report-full*.json" | head -n 1)
-          if [ -f "$FILE" ]; then
-            echo "✅ Found benchmark output: $FILE"
-            cp "$FILE" benchmark-results/latest.json
-          else
-            echo "❌ Could not find tokenizer benchmark JSON!"
-            echo "Contents of benchmark-results for debugging:"
-            find benchmark-results -maxdepth 3 -type f
+          echo "🔍 Searching for BenchmarkDotNet report files..."
+          find benchmark-results -type f -name "*report-full*.json" || true
+      
+          FILES=$(find benchmark-results -type f -name "*report-full*.json")
+          if [ -z "$FILES" ]; then
+            echo "❌ No benchmark report JSON files found!"
+            echo "Directory contents for debugging:"
+            find benchmark-results -maxdepth 4 -type f
             exit 1
           fi
+      
+          echo "✅ Found the following benchmark files:"
+          echo "$FILES"
+      
+          echo "[" > benchmark-results/latest.json
+          FIRST=true
+          for FILE in $FILES; do
+            if [ "$FIRST" = true ]; then
+              FIRST=false
+            else
+              echo "," >> benchmark-results/latest.json
+            fi
+            cat "$FILE" >> benchmark-results/latest.json
+          done
+          echo "]" >> benchmark-results/latest.json
+      
+          echo "✅ Combined benchmark results written to benchmark-results/latest.json"
+          ls -lh benchmark-results/latest.json
+
 
       - name: 🐍 Setup Python for comparison script
         uses: actions/setup-python@v5
