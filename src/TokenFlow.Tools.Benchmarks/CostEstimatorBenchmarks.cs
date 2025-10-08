@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using TokenFlow.AI.Costing;
+using TokenFlow.AI.Registry;
 using TokenFlow.Core.Models;
 
 namespace TokenFlow.Tools.Benchmarks
@@ -39,6 +40,16 @@ namespace TokenFlow.Tools.Benchmarks
         public decimal EstimateOutputCost()
         {
             return _estimator.EstimateOutputCost(TokenCount / 2, _model);
+        }
+
+        [Benchmark(Description = "Estimate cost from registry (CLI mode)")]
+        public decimal EstimateCost_FromRegistry()
+        {
+            var registry = new ModelRegistry();
+            var model = registry.GetById("gpt-4o");
+            var result = new TokenCountResult(1000, 500, 1500);
+            var estimator = new CostEstimator(registry);
+            return estimator.EstimateTotalCost(result, model);
         }
     }
 }

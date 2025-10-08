@@ -96,8 +96,10 @@
             var output = sw.ToString();
 
             Assert.Equal(0, exitCode);
-            Assert.Contains("Estimated cost", output);
+            Assert.Contains("ModelId", output);
+            Assert.Contains("TotalCost", output);
         }
+
 
         [Fact]
         public void Main_ShouldRunChunkCommand()

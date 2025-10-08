@@ -15,8 +15,10 @@ namespace TokenFlow.Tools.Tests
                 Assert.Equal(0, result);
             });
 
-            Assert.Contains("Tokens:", output);
-            Assert.Contains("Estimated cost", output);
+            Assert.Contains("ModelId", output);
+            Assert.Contains("InputRatePer1K", output);
+            Assert.Contains("OutputRatePer1K", output);
+            Assert.Contains("TotalCost", output);
         }
 
         [Fact]
@@ -54,6 +56,21 @@ namespace TokenFlow.Tools.Tests
             });
 
             Assert.Contains("[TokenFlow.AI] Using model registry source:", output);
+        }
+
+        [Fact]
+        public void Run_ShouldPrintCostBreakdown_WhenRegistryModelUsed()
+        {
+            var registry = new ModelRegistry();
+            var output = TestConsoleHelper.CaptureOutput(() =>
+            {
+                int result = CostCommand.Run("Flow.AI cost estimation test.", "gpt-4o", registry);
+                Assert.Equal(0, result);
+            });
+
+            Assert.Contains("ModelId", output);
+            Assert.Contains("InputRatePer1K", output);
+            Assert.Contains("OutputRatePer1K", output);
         }
     }
 }
