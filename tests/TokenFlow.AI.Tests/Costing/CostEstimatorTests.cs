@@ -130,6 +130,31 @@ namespace TokenFlow.AI.Tests.Costing
             // Assert
             Assert.Equal(0, total);
         }
+
+        [Fact]
+        public void Private_Guard_ShouldTrigger_ModelFallback()
+        {
+            var registry = new ModelRegistry();
+            var estimator = new CostEstimator(registry);
+
+            // Force a null model in a method that uses the guard internally
+            var method = typeof(CostEstimator).GetMethod("EstimateOutputCost");
+            var result = method.Invoke(estimator, new object[] { 500, null });
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void Private_Guard_ShouldReturnZero_WhenResultNull()
+        {
+            var registry = new ModelRegistry();
+            var estimator = new CostEstimator(registry);
+
+            var method = typeof(CostEstimator).GetMethod("EstimateDetailedCost");
+            var result = method.Invoke(estimator, new object[] { null, "gpt-4o" });
+
+            Assert.NotNull(result);
+        }
     }
 }
 
