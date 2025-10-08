@@ -19,7 +19,7 @@ namespace TokenFlow.Tools.Benchmarks
                 // CI-friendly console logs
                 .AddLogger(ConsoleLogger.Default)
                 // Put all artifacts in a predictable folder for CI
-                .WithArtifactsPath("benchmark-results");
+                .WithArtifactsPath("benchmark-results/results");
 
             BenchmarkSwitcher
                 .FromAssembly(typeof(Program).Assembly)
