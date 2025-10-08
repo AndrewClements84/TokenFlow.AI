@@ -171,6 +171,23 @@ namespace TokenFlow.AI.Tests.Costing
             Assert.True(total > 0); // should calculate cost using resolved model
         }
 
+        [Fact]
+        public void EstimateTotalCost_PrivateNullGuard_ShouldReturnZero()
+        {
+            var registry = new ModelRegistry();
+            var estimator = new CostEstimator(registry);
+
+            // use reflection to call the exact overload
+            var method = typeof(CostEstimator)
+                .GetMethod("EstimateTotalCost", new[] { typeof(TokenCountResult), typeof(ModelSpec) });
+
+            var model = new ModelSpec("gpt-4o", "openai", "tiktoken", 128000, 4096, 0.01m, 0.03m);
+
+            // call with null result to ensure guard triggers
+            var result = (decimal)method.Invoke(estimator, new object[] { null, model });
+
+            Assert.Equal(0m, result);
+        }
     }
 }
 
