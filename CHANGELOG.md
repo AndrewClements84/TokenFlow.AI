@@ -7,6 +7,29 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.6.0] — 2025-10-08
+### 🔗 Flow.AI.Core Integration
+- Integrated official **Flow.AI.Core v0.1.0** package.
+- Implemented `Flow.AI.Core.Interfaces.ITokenFlowProvider` within `TokenFlowProvider`.
+- Removed temporary placeholder interface from TokenFlow.AI.
+- Verified full compatibility with all existing functionality and tests (100% coverage retained).
+- TokenFlow.AI is now the core engine of the **Flow.AI ecosystem**, ready for use by downstream packages such as **PromptStream.AI**.
+
+### 🧱 Architecture
+- TokenFlow.AI now exposes a stable, Flow.AI-compliant provider layer.
+- All registry, tokenizer, and costing subsystems remain unchanged.
+- Ready for consumption by higher-level Flow projects (PromptStream.AI, DataFlow.AI, ChatFlow.AI).
+
+### 🧪 Testing & Coverage
+- All integration tests pass using the new provider interface.
+- Maintains 100% line and branch coverage across all projects.
+- Verified fallback, shared registry, and exception branches.
+
+### 📘 Documentation
+- Updated README and docs to reflect Flow.AI.Core integration and PromptStream.AI naming.
+
+---
+
 ## [0.5.0] — 2025-10-07
 ### ✨ New Features
 - **Advanced Tokenizers** module (`TokenFlow.Tokenizers`) introduced:
