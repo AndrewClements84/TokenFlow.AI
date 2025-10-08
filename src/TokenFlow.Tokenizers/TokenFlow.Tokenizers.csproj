@@ -17,8 +17,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SharpToken" Version="1.1.2" />
-		<PackageReference Include="TiktokenSharp" Version="1.0.10" />
+		<PackageReference Include="SharpToken" Version="2.0.4" />
+		<PackageReference Include="TiktokenSharp" Version="1.1.8" />
 	</ItemGroup>
 
 </Project>
