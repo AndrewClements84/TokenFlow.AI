@@ -2,36 +2,60 @@ import sys
 import json
 from statistics import mean
 
-# -----------------------------
-# TokenFlow.AI Benchmark Comparator
-# -----------------------------
-# Usage:
-#   python3 .github/scripts/compare_benchmarks.py baseline.json latest.json
-# Fails the build if mean runtime exceeds baseline by >10%.
-
 THRESHOLD = 1.10  # 10% slower allowed
 
+def extract_entries(data):
+    """Flattens JSON data to a list of benchmark entries."""
+    entries = []
+
+    if isinstance(data, list):
+        for item in data:
+            if isinstance(item, dict):
+                entries.append(item)
+            elif isinstance(item, list):
+                entries.extend(extract_entries(item))
+            elif isinstance(item, str):
+                try:
+                    parsed = json.loads(item)
+                    entries.extend(extract_entries(parsed))
+                except Exception:
+                    continue
+    elif isinstance(data, dict):
+        entries.append(data)
+    else:
+        try:
+            parsed = json.loads(data)
+            entries.extend(extract_entries(parsed))
+        except Exception:
+            pass
+
+    return entries
+
+
 def get_mean_time(entry):
-    """Extract mean time from BenchmarkDotNet JSON entry."""
+    """Extract mean time from a BenchmarkDotNet JSON entry."""
     stats = entry.get("Statistics", {})
     mean_val = stats.get("Mean")
     if isinstance(mean_val, list):
         return mean(mean_val)
-    return float(mean_val) if mean_val else None
+    try:
+        return float(mean_val)
+    except (TypeError, ValueError):
+        return None
+
 
 def compare_benchmarks(baseline_data, latest_data):
-    """Compare each benchmark entry and report regressions."""
+    base_entries = extract_entries(baseline_data)
+    latest_entries = extract_entries(latest_data)
     regressions = []
 
-    # Both files are lists of benchmark results
-    for base_entry in baseline_data:
-        bench_name = base_entry.get("FullName") or base_entry.get("DisplayInfo")
+    for base_entry in base_entries:
+        bench_name = base_entry.get("FullName") or base_entry.get("DisplayInfo") or base_entry.get("Title")
         base_mean = get_mean_time(base_entry)
-        if base_mean is None:
+        if bench_name is None or base_mean is None:
             continue
 
-        # Try to find matching benchmark in latest results
-        match = next((b for b in latest_data if b.get("FullName") == bench_name), None)
+        match = next((b for b in latest_entries if (b.get("FullName") or b.get("DisplayInfo") or b.get("Title")) == bench_name), None)
         if not match:
             print(f"⚠️  Missing benchmark in latest results: {bench_name}")
             continue
@@ -53,6 +77,7 @@ def compare_benchmarks(baseline_data, latest_data):
         print("✅ No significant regressions detected.")
         sys.exit(0)
 
+
 def main():
     if len(sys.argv) != 3:
         print("Usage: compare_benchmarks.py baseline.json latest.json")
@@ -67,6 +92,6 @@ def main():
 
     compare_benchmarks(baseline_data, latest_data)
 
+
 if __name__ == "__main__":
     main()
-
