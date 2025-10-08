@@ -116,22 +116,6 @@ namespace TokenFlow.AI.Tests.Costing
         }
 
         [Fact]
-        public void EstimateTotalCost_ShouldReturnZero_WhenResultIsNull()
-        {
-            // Arrange
-            var registry = new ModelRegistry();
-            var estimator = new CostEstimator(registry);
-            var model = new ModelSpec("gpt-4o", "openai", "tiktoken", 128000, 4096, 0.01m, 0.03m);
-
-            // Act
-            // Pass null result to trigger 'if (result == null)'
-            var total = estimator.EstimateTotalCost(null, model);
-
-            // Assert
-            Assert.Equal(0, total);
-        }
-
-        [Fact]
         public void Private_Guard_ShouldTrigger_ModelFallback()
         {
             var registry = new ModelRegistry();
@@ -155,6 +139,38 @@ namespace TokenFlow.AI.Tests.Costing
 
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public void EstimateTotalCost_ShouldReturnZero_WhenResultIsNull()
+        {
+            // Arrange
+            var registry = new ModelRegistry();
+            var estimator = new CostEstimator(registry);
+            var model = new ModelSpec("gpt-4o", "openai", "tiktoken", 128000, 4096, 0.01m, 0.03m);
+
+            // Act
+            var total = estimator.EstimateTotalCost(null, model);
+
+            // Assert
+            Assert.Equal(0, total);
+        }
+
+        [Fact]
+        public void EstimateTotalCost_ShouldResolveModel_WhenModelIsNull()
+        {
+            // Arrange
+            var registry = new ModelRegistry();
+            var estimator = new CostEstimator(registry);
+            var result = new TokenCountResult(500, 250, 750);
+
+            // Act
+            // Model is null to trigger the guard
+            var total = estimator.EstimateTotalCost(result, null);
+
+            // Assert
+            Assert.True(total > 0); // should calculate cost using resolved model
+        }
+
     }
 }
 
