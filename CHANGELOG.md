@@ -7,6 +7,31 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.6.1] — 2025-10-08
+### 🧪 Performance Regression Tracking (Benchmark Integration)
+- Introduced full **BenchmarkDotNet** integration for TokenFlow.Tools.Benchmarks.
+- Added **Tokenizer**, **Chunker**, and **CostEstimator** benchmark suites.
+- CI workflow now:
+  - Runs all benchmarks on each build.
+  - Exports structured results as JSON, Markdown, and HTML.
+  - Merges outputs into `benchmark-results/latest.json`.
+  - Compares results against committed `baseline.json` for performance regressions.
+  - Fails the build automatically if any benchmark exceeds a **10% slowdown threshold**.
+- Added automated artifact upload for benchmark results.
+- Implemented a resilient Python comparison script with flexible JSON parsing.
+- Achieved **complete performance regression tracking coverage** (100% functional).
+
+### 🧱 Architecture
+- Explicit benchmark runner in `Program.cs` ensures deterministic execution for CI.
+- Added absolute artifact paths for consistent cross-platform exports.
+- Benchmarks now emit reports to `benchmark-results/results/` and never conflict with baseline data.
+
+### 🧪 Testing & Validation
+- Validated JSON output and regression logic locally and on GitHub Actions.
+- Verified export compatibility across .NET 8.0 and .NET Standard 2.0 environments.
+
+---
+
 ## [0.6.0] — 2025-10-08
 ### 🔗 Flow.AI.Core Integration
 - Integrated official **Flow.AI.Core v0.1.0** package.
