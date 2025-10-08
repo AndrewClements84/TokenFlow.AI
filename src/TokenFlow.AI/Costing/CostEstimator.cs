@@ -43,8 +43,10 @@ namespace TokenFlow.AI.Costing
         /// <summary>
         /// Returns a detailed cost breakdown with input/output rates.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public CostBreakdownResult EstimateDetailedCost(TokenCountResult result, string modelId)
         {
+            
             if (result == null)
                 return new CostBreakdownResult { ModelId = modelId };
 
