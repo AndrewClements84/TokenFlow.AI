@@ -1,0 +1,33 @@
+name: Codecov Only
+
+on:
+  workflow_dispatch:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🧰 Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 📦 Restore
+        run: dotnet restore TokenFlow.AI.sln
+
+      - name: 🧪 Run Tests with Coverage
+        run: dotnet test TokenFlow.AI.sln --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/coverage/
+
+      - name: 📊 Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./**/coverage.cobertura.xml
+          flags: unittests
+          fail_ci_if_error: true
+          verbose: true
+
