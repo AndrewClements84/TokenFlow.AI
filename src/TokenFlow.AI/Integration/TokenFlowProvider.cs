@@ -1,9 +1,10 @@
-﻿using TokenFlow.AI.Client;
+﻿using Flow.AI.Core.Interfaces;
+using TokenFlow.AI.Client;
 
 namespace TokenFlow.AI.Integration
 {
     /// <summary>
-    /// Adapter that exposes TokenFlow functionality through the Flow.AI.Core provider interface.
+    /// Adapter that bridges TokenFlow.AI functionality to Flow.AI.Core contracts.
     /// </summary>
     public class TokenFlowProvider : ITokenFlowProvider
     {
