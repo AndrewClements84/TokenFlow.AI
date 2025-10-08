@@ -188,6 +188,19 @@ namespace TokenFlow.AI.Tests.Costing
 
             Assert.Equal(0m, result);
         }
+
+        [Fact]
+        public void EstimateTotalCost_ShouldReturnZero_WhenResultNull_Explicit()
+        {
+            var registry = new ModelRegistry();
+            var estimator = new CostEstimator(registry);
+            var model = new ModelSpec("gpt-4o", "openai", "tiktoken", 128000, 4096, 0.01m, 0.03m);
+
+            TokenCountResult result = null; // ensure null reference
+            var total = estimator.EstimateTotalCost(result, model);
+
+            Assert.Equal(0, total);
+        }
     }
 }
 
