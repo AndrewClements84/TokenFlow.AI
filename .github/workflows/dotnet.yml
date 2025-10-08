@@ -74,10 +74,12 @@ jobs:
         continue-on-error: false
 
       - name: 📤 Upload benchmark artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
           path: benchmark-results/
+          if-no-files-found: error
+          retention-days: 7
 
       # -------------------------------------------------------------------
 
