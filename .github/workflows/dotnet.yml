@@ -116,6 +116,7 @@ jobs:
       # -------------------------------------------------------------------
 
       - name: 🧮 Verify benchmarks compile
+        if: ${{ env.RUN_BENCHMARKS == 'true' }}
         run: dotnet run --project src/TokenFlow.Tools.Benchmarks/TokenFlow.Tools.Benchmarks.csproj -c Release -- --list
         continue-on-error: true
 
