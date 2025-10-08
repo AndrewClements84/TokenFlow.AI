@@ -1,9 +1,7 @@
 # .NET Build, Test & Publish Workflow
 # ----------------------------------
-# This workflow builds, tests, and publishes TokenFlow packages.
-# - Runs on push/PR to master or main.
-# - Publishes to NuGet only when a semantic version tag (vX.Y.Z) is pushed.
-# - Includes Codecov reporting and benchmark smoke verification.
+# Builds, tests, and publishes TokenFlow packages.
+# Includes performance regression tracking and artifact uploads.
 
 name: .NET Build, Test & Publish
 
@@ -11,7 +9,7 @@ on:
   push:
     branches: [ master, main ]
     tags:
-      - 'v*.*.*'       # Publish only on version tags
+      - 'v*.*.*'
   pull_request:
     branches: [ master, main ]
 
@@ -49,25 +47,30 @@ jobs:
       # -------------------------------------------------------------------
       # 🧪 Performance Benchmark & Regression Tracking (TokenFlow v0.6.1)
       # -------------------------------------------------------------------
+
+      - name: 🧩 Ensure benchmark-results directory exists
+        run: mkdir -p benchmark-results/results
+
       - name: 🧭 Run Benchmarks
-        run: dotnet run -c Release --project src/TokenFlow.Tools.Benchmarks --exporters json --out benchmark-results/
+        run: dotnet run -c Release --project src/TokenFlow.Tools.Benchmarks
 
       - name: 🗂️ Prepare latest benchmark output (merge all JSONs)
         run: |
           echo "🔍 Searching for BenchmarkDotNet report files..."
-          find benchmark-results -type f -name "*report-full*.json" || true
-      
+          pwd
+          ls -R benchmark-results || true
+
           FILES=$(find benchmark-results -type f -name "*report*.json" | grep -v baseline.json || true)
           if [ -z "$FILES" ]; then
             echo "❌ No benchmark report JSON files found!"
             echo "Directory contents for debugging:"
-            find benchmark-results -maxdepth 4 -type f
+            find . -maxdepth 5 -type f
             exit 1
           fi
-      
-          echo "✅ Found the following benchmark files:"
+
+          echo "✅ Found benchmark files:"
           echo "$FILES"
-      
+
           echo "[" > benchmark-results/latest.json
           FIRST=true
           for FILE in $FILES; do
@@ -79,10 +82,9 @@ jobs:
             cat "$FILE" >> benchmark-results/latest.json
           done
           echo "]" >> benchmark-results/latest.json
-      
+
           echo "✅ Combined benchmark results written to benchmark-results/latest.json"
           ls -lh benchmark-results/latest.json
-
 
       - name: 🐍 Setup Python for comparison script
         uses: actions/setup-python@v5
@@ -147,13 +149,11 @@ jobs:
       - name: 🏗️ Build in Release mode
         run: dotnet build TokenFlow.AI.sln --configuration Release --no-restore
 
-      # Pack only public libraries
       - name: 📦 Pack TokenFlow.Core
         run: dotnet pack src/TokenFlow.Core/TokenFlow.Core.csproj --configuration Release --no-build -o ./artifacts
 
       - name: 📦 Pack TokenFlow.AI
         run: dotnet pack src/TokenFlow.AI/TokenFlow.AI.csproj --configuration Release --no-build -o ./artifacts
 
-      # Push to NuGet only for tagged versions
       - name: 🚀 Publish to NuGet (only on tagged release)
         run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
