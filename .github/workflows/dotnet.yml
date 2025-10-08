@@ -57,7 +57,7 @@ jobs:
           echo "🔍 Searching for BenchmarkDotNet report files..."
           find benchmark-results -type f -name "*report-full*.json" || true
       
-          FILES=$(find benchmark-results -type f -name "*report-full*.json")
+          FILES=$(find benchmark-results -type f -name "*report*.json" | grep -v baseline.json || true)
           if [ -z "$FILES" ]; then
             echo "❌ No benchmark report JSON files found!"
             echo "Directory contents for debugging:"
