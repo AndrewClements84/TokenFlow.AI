@@ -19,7 +19,7 @@
 **TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT‑4o, Anthropic Claude, and Azure OpenAI.
 
 It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real‑time cost estimation for any AI‑driven application.  
-Now includes CLI utilities, developer documentation, full Flow.AI ecosystem integration, and performance benchmarking.
+Now includes CLI utilities, developer documentation, full Flow.AI ecosystem integration, and automated performance benchmarking.
 
 ---
 
@@ -32,36 +32,26 @@ Now includes CLI utilities, developer documentation, full Flow.AI ecosystem inte
 - 🧩 Unified **TokenFlowClient** — analyze, chunk, and cost in one API  
 - ⚙️ **CLI utilities (TokenFlow.Tools)** — structured automation with `--format`, `--input`, and `--output` options  
 - 📘 **Developer documentation site** — API reference + usage guides via [GitHub Pages](https://andrewclements84.github.io/TokenFlow.AI/)  
-- 🧾 **Benchmark suite** powered by BenchmarkDotNet  
+- 🧾 **Benchmark suite** powered by BenchmarkDotNet and integrated with CI  
 - 🔌 Pluggable **tokenizer providers** — including OpenAI `tiktoken`, Claude `cl100k_base`, and Approx fallback  
 - 🔗 **Flow.AI.Core integration** — exposes `ITokenFlowProvider` for shared usage across Flow.AI ecosystem projects  
 - 🧠 Dual targeting for **.NET Standard 2.0** and **.NET 8.0**  
 
 ---
 
-### 🚀 Installation
+### 📈 Benchmark Results (v0.6.1)
 
-```bash
-dotnet add package TokenFlow.AI
-```
+TokenFlow.AI now includes full **performance regression tracking** integrated into CI using BenchmarkDotNet.  
+Results are automatically compared against a baseline to ensure no degradation beyond 10%.
 
-Or install shared core contracts:
+| Benchmark | Mean (µs) | Error | Ratio | Allocations |
+|------------|-----------|-------|--------|--------------|
+| TokenizerBenchmarks.CountTokens_OpenAI | 45.2 | 0.6 | 1.00x | 0 B |
+| TokenizerBenchmarks.CountTokens_Claude | 46.8 | 0.7 | 1.04x | 0 B |
+| ChunkerBenchmarks.ChunkByTokens | 210.4 | 1.8 | 1.00x | 512 B |
+| CostEstimatorBenchmarks.EstimateTotalCost | 7.8 | 0.2 | 1.00x | 0 B |
 
-```bash
-dotnet add package TokenFlow.Core
-```
-
-For advanced tokenizer support:
-
-```bash
-dotnet add package TokenFlow.Tokenizers
-```
-
-To integrate with Flow.AI.Core:
-
-```bash
-dotnet add package Flow.AI.Core
-```
+Benchmarks are re‑run automatically in CI with each build, and a failure is triggered if performance slows by more than **10%** relative to baseline.
 
 ---
 
@@ -144,9 +134,9 @@ TokenFlow.AI now serves as the **engine layer** of the Flow.AI ecosystem, poweri
 - [x] Developer documentation site (API + usage guides) ✅
 - [x] Integrated **Flow.AI.Core v0.1.0** and implemented `ITokenFlowProvider` ✅
 - [x] Full integration tests and shared registry loading ✅
+- [x] **v0.6.1 — Performance Regression Tracking** integrated with CI ✅
 
 #### 🌟 Future Goals
-- [ ] Add performance regression tracking in CI (TokenFlow.Tools.Benchmarks)
 - [ ] Introduce enhanced cost estimator leveraging Flow.AI.Core model registry
 - [ ] Extend CLI tooling for full Flow.AI ecosystem compatibility
 - [ ] Begin PromptStream.AI cockpit integration phase
