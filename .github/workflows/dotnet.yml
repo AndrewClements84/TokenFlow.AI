@@ -2,6 +2,7 @@
 # ----------------------------------
 # Builds, tests, and publishes TokenFlow packages.
 # Includes performance regression tracking and artifact uploads.
+# You can toggle benchmarks with the RUN_BENCHMARKS flag below.
 
 name: .NET Build, Test & Publish
 
@@ -12,6 +13,9 @@ on:
       - 'v*.*.*'
   pull_request:
     branches: [ master, main ]
+
+env:
+  RUN_BENCHMARKS: false   # 🔁 Set to 'true' to enable performance benchmarks
 
 jobs:
   build:
@@ -45,16 +49,18 @@ jobs:
         run: dotnet test TokenFlow.AI.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
 
       # -------------------------------------------------------------------
-      # 🧪 Performance Benchmark & Regression Tracking (TokenFlow v0.6.1)
+      # 🧪 Performance Benchmark & Regression Tracking (optional)
       # -------------------------------------------------------------------
-
       - name: 🧩 Ensure benchmark-results directory exists
+        if: ${{ env.RUN_BENCHMARKS == 'true' }}
         run: mkdir -p benchmark-results/results
 
       - name: 🧭 Run Benchmarks
+        if: ${{ env.RUN_BENCHMARKS == 'true' }}
         run: dotnet run -c Release --project src/TokenFlow.Tools.Benchmarks
 
       - name: 🗂️ Prepare latest benchmark output (merge all JSONs)
+        if: ${{ env.RUN_BENCHMARKS == 'true' }}
         run: |
           echo "🔍 Searching for BenchmarkDotNet report files..."
           pwd
@@ -87,27 +93,30 @@ jobs:
           ls -lh benchmark-results/latest.json
 
       - name: 🐍 Setup Python for comparison script
+        if: ${{ env.RUN_BENCHMARKS == 'true' }}
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
       - name: 🔍 Compare Benchmark Results
+        if: ${{ env.RUN_BENCHMARKS == 'true' }}
         run: |
           echo "Comparing benchmark-results/latest.json with baseline.json..."
           python3 .github/scripts/compare_benchmarks.py benchmark-results/baseline.json benchmark-results/latest.json
         continue-on-error: false
 
       - name: 📤 Upload benchmark artifacts
+        if: ${{ env.RUN_BENCHMARKS == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
           path: benchmark-results/
           if-no-files-found: error
           retention-days: 7
-
       # -------------------------------------------------------------------
 
       - name: 🧮 Verify benchmarks compile
+        if: ${{ env.RUN_BENCHMARKS == 'true' }}
         run: dotnet run --project src/TokenFlow.Tools.Benchmarks/TokenFlow.Tools.Benchmarks.csproj -c Release -- --list
         continue-on-error: true
 
