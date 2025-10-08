@@ -46,6 +46,41 @@ jobs:
       - name: 🧪 Run all tests (including Tools.Tests)
         run: dotnet test TokenFlow.AI.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
 
+      # -------------------------------------------------------------------
+      # 🧪 Performance Benchmark & Regression Tracking (TokenFlow v0.6.1)
+      # -------------------------------------------------------------------
+      - name: 🧭 Run Benchmarks
+        run: dotnet run -c Release --project src/TokenFlow.Tools.Benchmarks --exporters json --out benchmark-results/
+
+      - name: 🗂️ Prepare latest benchmark output
+        run: |
+          FILE=$(find benchmark-results -name "*TokenizerBenchmarks-report-full.json" | head -n 1)
+          if [ -f "$FILE" ]; then
+            cp "$FILE" benchmark-results/latest.json
+          else
+            echo "❌ Could not find tokenizer benchmark JSON!"
+            exit 1
+          fi
+
+      - name: 🐍 Setup Python for comparison script
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: 🔍 Compare Benchmark Results
+        run: |
+          echo "Comparing benchmark-results/latest.json with baseline.json..."
+          python3 .github/scripts/compare_benchmarks.py benchmark-results/baseline.json benchmark-results/latest.json
+        continue-on-error: false
+
+      - name: 📤 Upload benchmark artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-results
+          path: benchmark-results/
+
+      # -------------------------------------------------------------------
+
       - name: 🧮 Verify benchmarks compile
         run: dotnet run --project src/TokenFlow.Tools.Benchmarks/TokenFlow.Tools.Benchmarks.csproj -c Release -- --list
         continue-on-error: true
