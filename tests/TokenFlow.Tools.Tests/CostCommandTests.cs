@@ -1,4 +1,6 @@
-﻿using TokenFlow.AI.Registry;
+﻿using Moq;
+using TokenFlow.AI.Registry;
+using TokenFlow.Core.Models;
 using TokenFlow.Tools.Commands;
 using TokenFlow.Tools.Tests.Helpers;
 
@@ -72,6 +74,22 @@ namespace TokenFlow.Tools.Tests
             Assert.Contains("InputRatePer1K", output);
             Assert.Contains("OutputRatePer1K", output);
         }
+
+        [Fact]
+        public void Run_ShouldFallbackToApproxModel_WhenModelMissing()
+        {
+            var mockRegistry = new Mock<IModelRegistry>();
+            mockRegistry.Setup(r => r.GetById(It.IsAny<string>())).Returns((ModelSpec)null);
+
+            var output = TestConsoleHelper.CaptureOutput(() =>
+            {
+                int result = CostCommand.Run("Fallback test input", "missing-model", mockRegistry.Object);
+                Assert.Equal(0, result);
+            });
+
+            Assert.Contains("[TokenFlow.AI] Using model registry source", output);
+        }
+
     }
 }
 
