@@ -1,102 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
 		<AssemblyName>TokenFlow.AI</AssemblyName>
 		<RootNamespace>TokenFlow.AI</RootNamespace>
 
-		<!-- NuGet package identity -->
 		<PackageId>TokenFlow.AI</PackageId>
-		<Version>0.7.7</Version>
+		<Version>0.7.8</Version>
 		<Authors>Andrew Clements</Authors>
 		<Company>Andrew Clements</Company>
 		<Product>TokenFlow.AI</Product>
 
-		<!-- Package metadata -->
-		<Description>
-			TokenFlow.AI — The core engine for tokenization, chunking, and cost estimation across modern LLMs
-			(OpenAI GPT-4o, Claude, Azure OpenAI).
+		<Description>Lightweight .NET library for tokenization, chunking, and cost estimation across modern LLMs (OpenAI GPT-4o, Claude, Azure OpenAI).</Description>
 
-			v0.7.7 ensures TokenFlow.Tokenizers.dll is always embedded consistently across all builds and CI.
-		</Description>
-
-		<PackageTags>
-			tokenization; llm; openai; gpt; azure-openai; anthropic; cost-estimation; tokenizer; promptstream; ai; dotnet; csharp
-		</PackageTags>
+		<PackageTags>tokenization;llm;openai;gpt;azure-openai;anthropic;cost-estimation;tokenizer;promptstream;ai;dotnet;csharp</PackageTags>
 		<RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/AndrewClements84/TokenFlow.AI</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>logo.png</PackageIcon>
 		<RepositoryType>git</RepositoryType>
 
-		<!-- Build & publish settings -->
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PackageOutputPath>..\..\artifacts</PackageOutputPath>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<IncludeBuildOutput>true</IncludeBuildOutput>
-
-		<!-- 🔧 Ensure CopyTokenizersToOutput always runs during Build -->
-		<BuildDependsOn>$(BuildDependsOn);CopyTokenizersToOutput</BuildDependsOn>
 	</PropertyGroup>
 
-	<!-- Package resources -->
 	<ItemGroup>
 		<None Include="..\..\assets\logo.png" Pack="true" PackagePath="" />
 		<None Include="..\..\README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
 
-	<!-- External dependencies -->
 	<ItemGroup>
 		<PackageReference Include="Flow.AI.Core" Version="0.1.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="System.Text.Json" Version="9.0.9" />
+		<PackageReference Include="TokenFlow.Tokenizers" Version="0.7.8" />
 	</ItemGroup>
 
-	<!-- Internal project references -->
 	<ItemGroup>
+		<ProjectReference Include="..\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj" />
 		<ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
-		<ProjectReference Include="..\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj" PrivateAssets="all" />
 	</ItemGroup>
 
-	<!-- ✅ Reliable target that always embeds TokenFlow.Tokenizers.dll -->
-	<Target Name="CopyTokenizersToOutput"
-			DependsOnTargets="Build"
-			BeforeTargets="GenerateNuspec;Pack"
-			Inputs="@(ProjectReference)"
-			Outputs="$(OutputPath)\TokenFlow.Tokenizers.dll">
-
-		<ItemGroup>
-			<TokenizerDll Include="@(ProjectReference->'%(TargetPath)')"
-						  Condition="'%(ProjectReference.Filename)' == 'TokenFlow.Tokenizers'" />
-		</ItemGroup>
-
-		<Message Text="🔄 Copying TokenFlow.Tokenizers.dll into $(OutputPath) before packing..." Importance="High" />
-
-		<Copy SourceFiles="@(TokenizerDll)"
-			  DestinationFolder="$(OutputPath)"
-			  SkipUnchangedFiles="true"
-			  Condition="'@(TokenizerDll)' != ''" />
-	</Target>
-
-	<!-- Explicitly include TokenFlow.Tokenizers.dll for both TFMs -->
-	<ItemGroup>
-		<None Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\net8.0\TokenFlow.Tokenizers.dll"
-			  Pack="true"
-			  PackagePath="lib\net8.0\"
-			  Visible="false"
-			  Condition="Exists('$(MSBuildProjectDirectory)\bin\$(Configuration)\net8.0\TokenFlow.Tokenizers.dll')" />
-
-		<None Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\netstandard2.0\TokenFlow.Tokenizers.dll"
-			  Pack="true"
-			  PackagePath="lib\netstandard2.0\"
-			  Visible="false"
-			  Condition="Exists('$(MSBuildProjectDirectory)\bin\$(Configuration)\netstandard2.0\TokenFlow.Tokenizers.dll')" />
-	</ItemGroup>
-
-	<!-- Embedded model data -->
 	<ItemGroup>
 		<EmbeddedResource Include="Data\models.data" />
 	</ItemGroup>

@@ -1,35 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
-    <Nullable>disable</Nullable>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <RootNamespace>TokenFlow.Tokenizers</RootNamespace>
-    <AssemblyName>TokenFlow.Tokenizers</AssemblyName>
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<RootNamespace>TokenFlow.Tokenizers</RootNamespace>
+		<AssemblyName>TokenFlow.Tokenizers</AssemblyName>
 
-    <!-- Build metadata -->
-    <Description>Model-specific tokenizer implementations for TokenFlow.AI (OpenAI, Claude, etc.)</Description>
-    <PackageTags>AI;Tokenizer;OpenAI;Claude;LLM;TokenFlow</PackageTags>
-    <Version>0.7.7</Version>
-    <Authors>Andrew Clements</Authors>
+		<PackageId>TokenFlow.Tokenizers</PackageId>
+		<Version>0.7.8</Version>
+		<Authors>Andrew Clements</Authors>
+		<Company>Andrew Clements</Company>
+		<Product>TokenFlow.Tokenizers</Product>
 
-    <!-- 👇 ensure DLLs copy correctly -->
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <IncludeBuildOutput>true</IncludeBuildOutput>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<Description>Model-specific tokenizer implementations for TokenFlow.AI (OpenAI, Claude, etc.).</Description>
 
-    <!-- Make sure MSBuild sees it as a buildable dependency -->
-    <IsPackable>true</IsPackable>
-  </PropertyGroup>
+		<PackageTags>AI;Tokenizer;OpenAI;Claude;LLM;TokenFlow</PackageTags>
+		<RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>logo.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
-  </ItemGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageOutputPath>..\..\artifacts</PackageOutputPath>
+		<IncludeBuildOutput>true</IncludeBuildOutput>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="SharpToken" Version="2.0.4" />
-    <PackageReference Include="TiktokenSharp" Version="1.1.8" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\assets\logo.png" Pack="true" PackagePath="" />
+		<None Include="..\..\README.md" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="SharpToken" Version="2.0.4" />
+		<PackageReference Include="TiktokenSharp" Version="1.1.8" />
+	</ItemGroup>
 
 </Project>
-
