@@ -69,13 +69,9 @@ jobs:
           FILES=$(find benchmark-results -type f -name "*report*.json" | grep -v baseline.json || true)
           if [ -z "$FILES" ]; then
             echo "❌ No benchmark report JSON files found!"
-            echo "Directory contents for debugging:"
             find . -maxdepth 5 -type f
             exit 1
           fi
-
-          echo "✅ Found benchmark files:"
-          echo "$FILES"
 
           echo "[" > benchmark-results/latest.json
           FIRST=true
@@ -113,7 +109,6 @@ jobs:
           path: benchmark-results/
           if-no-files-found: error
           retention-days: 7
-      # -------------------------------------------------------------------
 
       - name: 🧮 Verify benchmarks compile
         if: ${{ env.RUN_BENCHMARKS == 'true' }}
@@ -161,8 +156,9 @@ jobs:
       - name: 📦 Pack TokenFlow.Core
         run: dotnet pack src/TokenFlow.Core/TokenFlow.Core.csproj --configuration Release --no-build -o ./artifacts
 
-      - name: 📦 Pack TokenFlow.AI
-        run: dotnet pack src/TokenFlow.AI/TokenFlow.AI.csproj --configuration Release --no-build -o ./artifacts
+      # ✅ FIXED: Run a full pack for TokenFlow.AI so Tokenizers.dll embeds properly
+      - name: 📦 Pack TokenFlow.AI (with embedded Tokenizers)
+        run: dotnet pack src/TokenFlow.AI/TokenFlow.AI.csproj --configuration Release -o ./artifacts
 
       - name: 🚀 Publish to NuGet (only on tagged release)
-        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
