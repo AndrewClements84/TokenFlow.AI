@@ -8,7 +8,7 @@
 		<AssemblyName>TokenFlow.Tokenizers</AssemblyName>
 		<Description>Model-specific tokenizer implementations for TokenFlow.AI (OpenAI, Claude, etc.)</Description>
 		<PackageTags>AI;Tokenizer;OpenAI;Claude;LLM;TokenFlow</PackageTags>
-		<Version>0.7.1</Version>
+		<Version>0.7.2</Version>
 		<Authors>Andrew Clements</Authors>
 	</PropertyGroup>
 
