@@ -3,16 +3,23 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
     <PackageId>TokenFlow.Core</PackageId>
-    <Version>0.4.0</Version>
+    <Version>0.7.0</Version>
     <Authors>Andrew Clements</Authors>
     <Company>Andrew Clements</Company>
     <Description>
-      TokenFlow.Core — Shared core contracts and models for TokenFlow.AI.
-      Provides interfaces, data types, and common utilities for token counting,
-      cost estimation, and model specification. Compatible with .NET Standard 2.0.
+      TokenFlow.Core — Shared interfaces, models, and abstractions for the Flow.AI ecosystem.
+
+      Provides foundational contracts used by TokenFlow.AI, PromptStream.AI, and other Flow.AI components.
+      Includes:
+      • Core model definitions (ModelSpec, TokenCountResult)
+      • Common service interfaces (ITokenizer, ICostEstimator)
+      • Unified Flow.AI integration contracts (ITokenFlowProvider)
+
+      Part of the Flow.AI ecosystem — establishing a shared foundation for all Flow.AI modules and extensions.
     </Description>
+
     <PackageTags>
-      tokenflow;core;interfaces;contracts;models;ai;nlp;tokenization;cost;library;openai;anthropic
+       tokenflow; core; llm; openai; gpt; tokenizer; cost-estimation; abstractions; shared; contracts; dotnet; csharp; ai
     </PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
