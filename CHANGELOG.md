@@ -7,6 +7,44 @@ and adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.7.0] — 2025-10-09
+### Added
+- **CLI v3.0 alignment**: TokenFlow.Tools updated for full Flow.AI ecosystem compatibility.
+- `CostCommand` now dynamically resolves pricing data through the `Flow.AI.Core` model registry.
+- Introduced descriptive CLI output for fallback models and registry source (`approx` / `shared`).
+- Added streamlined `dotnet.yml` workflow with optional benchmarks and optimized build times.
+- Maintained 100% unit test coverage across all modules post-integration.
+
+### Changed
+- Refined CLI command structure for cost analysis (`tokenflow cost --model gpt-4o --input "Hello"`).
+- Improved `OutputFormatter` consistency with Flow.AI shared conventions.
+- Updated documentation (`README.md`, `docs/cost-tracking.md`) with new CLI usage and Flow.AI examples.
+- Tuned Codecov configuration for stable reporting and selective exclusions.
+
+### Fixed
+- Resolved CLI test coverage gaps in `CostCommandTests` and `ProgramTests`.
+- Addressed false positives in benchmark artifact detection on GitHub Actions.
+
+---
+
+## [0.6.2] — 2025-10-09
+### Added
+- **Enhanced Cost Estimator** leveraging the `Flow.AI.Core` model registry.
+- Added `CostBreakdownResult` model to provide structured breakdowns of token cost components.
+- Introduced dynamic model resolution via `_registry.GetById()` with `CreateApproxModel` fallback.
+- Added tests covering fallback resolution, cost breakdown creation, and null-guarded scenarios.
+
+### Changed
+- Refactored `CostEstimator` to unify pricing lookups between direct and detailed cost estimation.
+- Improved `ModelRegistry` integration for cross-library model sharing.
+- Refined test suite to achieve full line and branch coverage (≈ 100% post-merge).
+
+### Fixed
+- Resolved missing guard coverage paths for `EstimateTotalCost` and null fallback logic.
+- Fixed intermittent test failures caused by unregistered fallback models.
+
+---
+
 ## [0.6.1] — 2025-10-08
 ### 🧪 Performance Regression Tracking (Benchmark Integration)
 - Introduced full **BenchmarkDotNet** integration for TokenFlow.Tools.Benchmarks.
