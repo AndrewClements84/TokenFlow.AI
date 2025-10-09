@@ -10,7 +10,7 @@
     <!-- Build metadata -->
     <Description>Model-specific tokenizer implementations for TokenFlow.AI (OpenAI, Claude, etc.)</Description>
     <PackageTags>AI;Tokenizer;OpenAI;Claude;LLM;TokenFlow</PackageTags>
-    <Version>0.7.5</Version>
+    <Version>0.7.7</Version>
     <Authors>Andrew Clements</Authors>
 
     <!-- 👇 ensure DLLs copy correctly -->
