@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj" />
     <ProjectReference Include="..\\TokenFlow.AI\\TokenFlow.AI.csproj" />
     <ProjectReference Include="..\\TokenFlow.Core\\TokenFlow.Core.csproj" />
   </ItemGroup>

@@ -7,7 +7,7 @@
 
     <!-- NuGet package identity -->
     <PackageId>TokenFlow.AI</PackageId>
-    <Version>0.7.0</Version>
+    <Version>0.7.1</Version>
     <Authors>Andrew Clements</Authors>
     <Company>Andrew Clements</Company>
     <Product>TokenFlow.AI</Product>
@@ -41,6 +41,8 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageOutputPath>..\..\artifacts</PackageOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
 
     <!-- Optional but nice-to-have -->
     <NeutralLanguage>en</NeutralLanguage>
@@ -63,7 +65,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
-	<ProjectReference Include="..\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj" />
+    <ProjectReference Include="..\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

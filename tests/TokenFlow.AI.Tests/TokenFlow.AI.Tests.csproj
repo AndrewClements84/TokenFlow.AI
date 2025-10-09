@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TokenFlow.AI\TokenFlow.AI.csproj" />
+    <ProjectReference Include="..\..\src\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
