@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src="https://github.com/AndrewClements84/TokenFlow.AI/blob/master/assets/logo.png?raw=true" alt="TokenFlow.AI" width="500"/>
 </p>
@@ -35,14 +34,15 @@ Now includes CLI utilities, developer documentation, full Flow.AI ecosystem inte
 - 🧾 **Benchmark suite** powered by BenchmarkDotNet and integrated with CI  
 - 🔌 Pluggable **tokenizer providers** — including OpenAI `tiktoken`, Claude `cl100k_base`, and Approx fallback  
 - 🔗 **Flow.AI.Core integration** — exposes `ITokenFlowProvider` for shared usage across Flow.AI ecosystem projects  
+- 💬 **CLI v3.0 alignment** — enhanced cost commands, dynamic pricing, and Flow.AI registry integration  
 - 🧠 Dual targeting for **.NET Standard 2.0** and **.NET 8.0**  
 
 ---
 
-### 📈 Benchmark Results (v0.6.1)
+### 📈 Benchmark Results (v0.7.0)
 
-TokenFlow.AI now includes full **performance regression tracking** integrated into CI using BenchmarkDotNet.  
-Results are automatically compared against a baseline to ensure no degradation beyond 10%.
+TokenFlow.AI includes full **performance regression tracking** integrated into CI using BenchmarkDotNet.  
+Results are automatically compared against a baseline to ensure no degradation beyond 10%, with benchmarks now fully toggleable via the `RUN_BENCHMARKS` environment flag.
 
 | Benchmark | Mean (µs) | Error | Ratio | Allocations |
 |------------|-----------|-------|--------|--------------|
@@ -51,7 +51,7 @@ Results are automatically compared against a baseline to ensure no degradation b
 | ChunkerBenchmarks.ChunkByTokens | 210.4 | 1.8 | 1.00x | 512 B |
 | CostEstimatorBenchmarks.EstimateTotalCost | 7.8 | 0.2 | 1.00x | 0 B |
 
-Benchmarks are re‑run automatically in CI with each build, and a failure is triggered if performance slows by more than **10%** relative to baseline.
+Benchmarks are re‑run automatically in CI with each build, and can be disabled for faster builds using `RUN_BENCHMARKS=false`.
 
 ---
 
@@ -79,6 +79,12 @@ using TokenFlow.AI.Integration;
 ITokenFlowProvider provider = new TokenFlowProvider("gpt-4o-mini");
 int tokens = provider.CountTokens("gpt-4o-mini", "Hello Flow.AI!");
 Console.WriteLine($"Token count: {tokens}");
+```
+
+#### **CLI Cost Analysis:**
+
+```bash
+tokenflow cost --model gpt-4o --input "Estimate my token cost"
 ```
 
 #### **Benchmarking tokenizers:**
@@ -114,11 +120,11 @@ Code coverage is tracked with **Codecov**, and the project maintains **100% line
 
 ### 🔗 Flow.AI.Core Integration
 
-TokenFlow.AI now fully implements the shared `Flow.AI.Core.Interfaces.ITokenFlowProvider` interface.  
+TokenFlow.AI fully implements the shared `Flow.AI.Core.Interfaces.ITokenFlowProvider` interface.  
 This enables all Flow.AI components — including **PromptStream.AI**, **DataFlow.AI**, and **ChatFlow.AI** —  
 to perform token counting and cost analysis through a unified provider contract.
 
-TokenFlow.AI now serves as the **engine layer** of the Flow.AI ecosystem, powering all higher-level orchestration frameworks.
+TokenFlow.AI serves as the **engine layer** of the Flow.AI ecosystem, powering all higher-level orchestration frameworks.
 
 ---
 
@@ -135,11 +141,13 @@ TokenFlow.AI now serves as the **engine layer** of the Flow.AI ecosystem, poweri
 - [x] Integrated **Flow.AI.Core v0.1.0** and implemented `ITokenFlowProvider` ✅
 - [x] Full integration tests and shared registry loading ✅
 - [x] **v0.6.1 — Performance Regression Tracking** integrated with CI ✅
+- [x] **v0.6.2 — Enhanced Cost Estimator** using Flow.AI.Core registry ✅
+- [x] **v0.7.0 — CLI Alignment & Ecosystem Integration** ✅
 
 #### 🌟 Future Goals
-- [ ] Introduce enhanced cost estimator leveraging Flow.AI.Core model registry
-- [ ] Extend CLI tooling for full Flow.AI ecosystem compatibility
-- [ ] Begin PromptStream.AI cockpit integration phase
+- [ ] Extend CLI tooling for full Flow.AI ecosystem interoperability
+- [ ] Implement enhanced Flow.AI shared configuration support
+- [ ] Begin **PromptStream.AI** cockpit integration phase
 
 ---
 
