@@ -7,27 +7,21 @@
 
     <!-- NuGet package identity -->
     <PackageId>TokenFlow.AI</PackageId>
-    <Version>0.7.1</Version>
+    <Version>0.7.2</Version>
     <Authors>Andrew Clements</Authors>
     <Company>Andrew Clements</Company>
     <Product>TokenFlow.AI</Product>
 
     <!-- Package metadata -->
     <Description>
-      TokenFlow.AI — A lightweight .NET library for tokenization, chunking, and cost estimation across modern LLMs
+      TokenFlow.AI — A lightweight .NET library for tokenization, chunking, and cost estimation across modern LLMs.
       (OpenAI GPT-4o, Claude, Azure OpenAI).
 
-      v0.7.0 introduces:
-      • CLI v3.0 alignment with unified cost analysis commands
-      • Flow.AI.Core model registry integration
-      • Dynamic cost estimation with fallback handling
-      • Optional benchmark regression tracking in CI/CD
-
-      Part of the Flow.AI ecosystem — the engine powering PromptStream.AI and related frameworks.
+      v0.7.2 embeds TokenFlow.Tokenizers for self-contained distribution and improved compatibility with PromptStream.AI.
     </Description>
 
     <PackageTags>
-      tokenization; llm; openai; gpt; azure-openai; anthropic; cost-estimation; tokenizer; promptstream; ai; cli; benchmarkdotnet; dotnet; csharp
+      tokenization; llm; openai; gpt; azure-openai; anthropic; cost-estimation; tokenizer; promptstream; ai; dotnet; csharp
     </PackageTags>
     <RepositoryUrl>https://github.com/AndrewClements84/TokenFlow.AI</RepositoryUrl>
     <PackageProjectUrl>https://github.com/AndrewClements84/TokenFlow.AI</PackageProjectUrl>
@@ -43,33 +37,50 @@
     <PackageOutputPath>..\..\artifacts</PackageOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <IncludeBuildOutput>true</IncludeBuildOutput>
-
-    <!-- Optional but nice-to-have -->
-    <NeutralLanguage>en</NeutralLanguage>
-    <!-- <Copyright>© 2025 Andrew Clements</Copyright> -->
   </PropertyGroup>
 
+  <!-- Package resources -->
   <ItemGroup>
     <None Include="..\..\assets\logo.png" Pack="true" PackagePath="" />
     <None Include="..\..\README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
+  <!-- External dependencies -->
   <ItemGroup>
     <PackageReference Include="Flow.AI.Core" Version="0.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Text.Json" Version="9.0.9" />
   </ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="System.Text.Json" Version="9.0.9" />
-	</ItemGroup>
-
+  <!-- Internal project references -->
   <ItemGroup>
     <ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
     <ProjectReference Include="..\TokenFlow.Tokenizers\TokenFlow.Tokenizers.csproj" PrivateAssets="all" />
   </ItemGroup>
 
+  <!-- Safe copy of TokenFlow.Tokenizers.dll -->
+  <Target Name="CopyTokenizersToOutput" AfterTargets="Build">
+    <ItemGroup>
+      <TokenizerDll Include="@(ProjectReference->'%(TargetPath)')"
+                    Condition="'%(ProjectReference.Filename)' == 'TokenFlow.Tokenizers'" />
+    </ItemGroup>
+
+    <Message Text="🔄 Found Tokenizer DLL: @(TokenizerDll)" Importance="High" />
+
+    <Copy SourceFiles="@(TokenizerDll)"
+          DestinationFolder="$(OutputPath)"
+          SkipUnchangedFiles="true"
+          Condition="'@(TokenizerDll)' != ''" />
+  </Target>
+
+  <!-- Embed Tokenizers.dll into NuGet package -->
+  <ItemGroup Condition="'@(TokenizerDll)' != ''">
+    <None Include="@(TokenizerDll)" Pack="true" PackagePath="lib\$(TargetFramework)\" />
+  </ItemGroup>
+
+  <!-- Embedded model data -->
   <ItemGroup>
-	<EmbeddedResource Include="Data\models.data" />
+    <EmbeddedResource Include="Data\models.data" />
   </ItemGroup>
 
 </Project>
