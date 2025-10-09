@@ -1,8 +1,7 @@
 # .NET Build, Test & Publish Workflow
 # ----------------------------------
 # Builds, tests, and publishes TokenFlow packages.
-# Includes performance regression tracking and artifact uploads.
-# You can toggle benchmarks with the RUN_BENCHMARKS flag below.
+# Includes code coverage, verification, and artifact uploads.
 
 name: .NET Build, Test & Publish
 
@@ -15,7 +14,7 @@ on:
     branches: [ master, main ]
 
 env:
-  RUN_BENCHMARKS: false   # 🔁 Set to 'true' to enable performance benchmarks
+  RUN_BENCHMARKS: false
 
 jobs:
   build:
@@ -47,73 +46,6 @@ jobs:
 
       - name: 🧪 Run all tests (including Tools.Tests)
         run: dotnet test TokenFlow.AI.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
-
-      # -------------------------------------------------------------------
-      # 🧪 Performance Benchmark & Regression Tracking (optional)
-      # -------------------------------------------------------------------
-      - name: 🧩 Ensure benchmark-results directory exists
-        if: ${{ env.RUN_BENCHMARKS == 'true' }}
-        run: mkdir -p benchmark-results/results
-
-      - name: 🧭 Run Benchmarks
-        if: ${{ env.RUN_BENCHMARKS == 'true' }}
-        run: dotnet run -c Release --project src/TokenFlow.Tools.Benchmarks
-
-      - name: 🗂️ Prepare latest benchmark output (merge all JSONs)
-        if: ${{ env.RUN_BENCHMARKS == 'true' }}
-        run: |
-          echo "🔍 Searching for BenchmarkDotNet report files..."
-          pwd
-          ls -R benchmark-results || true
-
-          FILES=$(find benchmark-results -type f -name "*report*.json" | grep -v baseline.json || true)
-          if [ -z "$FILES" ]; then
-            echo "❌ No benchmark report JSON files found!"
-            find . -maxdepth 5 -type f
-            exit 1
-          fi
-
-          echo "[" > benchmark-results/latest.json
-          FIRST=true
-          for FILE in $FILES; do
-            if [ "$FIRST" = true ]; then
-              FIRST=false
-            else
-              echo "," >> benchmark-results/latest.json
-            fi
-            cat "$FILE" >> benchmark-results/latest.json
-          done
-          echo "]" >> benchmark-results/latest.json
-
-          echo "✅ Combined benchmark results written to benchmark-results/latest.json"
-          ls -lh benchmark-results/latest.json
-
-      - name: 🐍 Setup Python for comparison script
-        if: ${{ env.RUN_BENCHMARKS == 'true' }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: 🔍 Compare Benchmark Results
-        if: ${{ env.RUN_BENCHMARKS == 'true' }}
-        run: |
-          echo "Comparing benchmark-results/latest.json with baseline.json..."
-          python3 .github/scripts/compare_benchmarks.py benchmark-results/baseline.json benchmark-results/latest.json
-        continue-on-error: false
-
-      - name: 📤 Upload benchmark artifacts
-        if: ${{ env.RUN_BENCHMARKS == 'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: benchmark-results
-          path: benchmark-results/
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: 🧮 Verify benchmarks compile
-        if: ${{ env.RUN_BENCHMARKS == 'true' }}
-        run: dotnet run --project src/TokenFlow.Tools.Benchmarks/TokenFlow.Tools.Benchmarks.csproj -c Release -- --list
-        continue-on-error: true
 
       - name: 📊 Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -147,6 +79,12 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: ♻️ Clean old artifacts
+        run: |
+          echo "🧹 Cleaning old artifacts..."
+          rm -rf ./artifacts
+          mkdir -p ./artifacts
+
       - name: 📦 Restore dependencies
         run: dotnet restore TokenFlow.AI.sln
 
@@ -156,9 +94,37 @@ jobs:
       - name: 📦 Pack TokenFlow.Core
         run: dotnet pack src/TokenFlow.Core/TokenFlow.Core.csproj --configuration Release --no-build -o ./artifacts
 
-      # ✅ FIXED: Run a full pack for TokenFlow.AI so Tokenizers.dll embeds properly
       - name: 📦 Pack TokenFlow.AI (with embedded Tokenizers)
         run: dotnet pack src/TokenFlow.AI/TokenFlow.AI.csproj --configuration Release -o ./artifacts
 
+      # ✅ NEW STEP: Verify contents before publishing
+      - name: 🔍 Verify TokenFlow.AI.nupkg contents
+        run: |
+          echo "🧩 Checking contents of generated TokenFlow.AI package..."
+          for pkg in ./artifacts/TokenFlow.AI.*.nupkg; do
+            echo "Inspecting $pkg"
+            unzip -l "$pkg" | tee package_contents.txt
+            if ! grep -q "TokenFlow.AI.dll" package_contents.txt; then
+              echo "❌ ERROR: TokenFlow.AI.dll missing from $pkg"
+              exit 1
+            fi
+            if ! grep -q "TokenFlow.Tokenizers.dll" package_contents.txt; then
+              echo "❌ ERROR: TokenFlow.Tokenizers.dll missing from $pkg"
+              exit 1
+            fi
+            echo "✅ Verified $pkg contains both DLLs."
+          done
+
+      # ✅ NEW STEP: Upload verified .nupkg files for inspection
+      - name: 📤 Upload verified NuGet packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-nuget-packages
+          path: ./artifacts/*.nupkg
+          retention-days: 7
+
       - name: 🚀 Publish to NuGet (only on tagged release)
-        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push "./artifacts/*.nupkg" \
+               --api-key ${{ secrets.NUGET_API_KEY }} \
+               --source https://api.nuget.org/v3/index.json \
+               --skip-duplicate
