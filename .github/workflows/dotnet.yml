@@ -1,8 +1,3 @@
-# .NET Build, Test & Publish Workflow
-# ----------------------------------
-# Builds, tests, and publishes TokenFlow packages.
-# Includes code coverage, verification, and artifact uploads.
-
 name: .NET Build, Test & Publish
 
 on:
@@ -44,7 +39,7 @@ jobs:
       - name: 🏗️ Build all projects
         run: dotnet build TokenFlow.AI.sln --no-restore --configuration Release
 
-      - name: 🧪 Run all tests (including Tools.Tests)
+      - name: 🧪 Run all tests
         run: dotnet test TokenFlow.AI.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
 
       - name: 📊 Upload coverage to Codecov
@@ -91,38 +86,27 @@ jobs:
       - name: 🏗️ Build in Release mode
         run: dotnet build TokenFlow.AI.sln --configuration Release --no-restore
 
+      # 🧩 Step 1 — Pack Core
       - name: 📦 Pack TokenFlow.Core
         run: dotnet pack src/TokenFlow.Core/TokenFlow.Core.csproj --configuration Release --no-build -o ./artifacts
 
-      - name: 📦 Pack TokenFlow.AI (with embedded Tokenizers)
-        run: dotnet pack src/TokenFlow.AI/TokenFlow.AI.csproj --configuration Release -o ./artifacts
+      # 🧩 Step 2 — Pack Tokenizers (standalone package)
+      - name: 📦 Pack TokenFlow.Tokenizers
+        run: dotnet pack src/TokenFlow.Tokenizers/TokenFlow.Tokenizers.csproj --configuration Release --no-build -o ./artifacts
 
-      # ✅ NEW STEP: Verify contents before publishing
-      - name: 🔍 Verify TokenFlow.AI.nupkg contents
-        run: |
-          echo "🧩 Checking contents of generated TokenFlow.AI package..."
-          for pkg in ./artifacts/TokenFlow.AI.*.nupkg; do
-            echo "Inspecting $pkg"
-            unzip -l "$pkg" | tee package_contents.txt
-            if ! grep -q "TokenFlow.AI.dll" package_contents.txt; then
-              echo "❌ ERROR: TokenFlow.AI.dll missing from $pkg"
-              exit 1
-            fi
-            if ! grep -q "TokenFlow.Tokenizers.dll" package_contents.txt; then
-              echo "❌ ERROR: TokenFlow.Tokenizers.dll missing from $pkg"
-              exit 1
-            fi
-            echo "✅ Verified $pkg contains both DLLs."
-          done
+      # 🧩 Step 3 — Pack AI (depends on published Tokenizers)
+      - name: 📦 Pack TokenFlow.AI
+        run: dotnet pack src/TokenFlow.AI/TokenFlow.AI.csproj --configuration Release -o ./artifacts /p:UsePackageReference=true
 
-      # ✅ NEW STEP: Upload verified .nupkg files for inspection
-      - name: 📤 Upload verified NuGet packages
+      # 📤 Optional: upload artifacts for manual inspection
+      - name: 📤 Upload built NuGet packages
         uses: actions/upload-artifact@v4
         with:
-          name: verified-nuget-packages
+          name: nuget-packages
           path: ./artifacts/*.nupkg
           retention-days: 7
 
+      # 🚀 Step 4 — Publish all packages to NuGet
       - name: 🚀 Publish to NuGet (only on tagged release)
         run: dotnet nuget push "./artifacts/*.nupkg" \
                --api-key ${{ secrets.NUGET_API_KEY }} \
