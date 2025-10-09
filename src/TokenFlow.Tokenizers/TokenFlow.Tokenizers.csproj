@@ -1,24 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
-		<Nullable>disable</Nullable>
-		<ImplicitUsings>disable</ImplicitUsings>
-		<RootNamespace>TokenFlow.Tokenizers</RootNamespace>
-		<AssemblyName>TokenFlow.Tokenizers</AssemblyName>
-		<Description>Model-specific tokenizer implementations for TokenFlow.AI (OpenAI, Claude, etc.)</Description>
-		<PackageTags>AI;Tokenizer;OpenAI;Claude;LLM;TokenFlow</PackageTags>
-		<Version>0.7.2</Version>
-		<Authors>Andrew Clements</Authors>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>TokenFlow.Tokenizers</RootNamespace>
+    <AssemblyName>TokenFlow.Tokenizers</AssemblyName>
 
-	<ItemGroup>
-		<ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
-	</ItemGroup>
+    <!-- Build metadata -->
+    <Description>Model-specific tokenizer implementations for TokenFlow.AI (OpenAI, Claude, etc.)</Description>
+    <PackageTags>AI;Tokenizer;OpenAI;Claude;LLM;TokenFlow</PackageTags>
+    <Version>0.7.4</Version>
+    <Authors>Andrew Clements</Authors>
 
-	<ItemGroup>
-		<PackageReference Include="SharpToken" Version="2.0.4" />
-		<PackageReference Include="TiktokenSharp" Version="1.1.8" />
-	</ItemGroup>
+    <!-- 👇 ensure DLLs copy correctly -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <!-- Make sure MSBuild sees it as a buildable dependency -->
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpToken" Version="2.0.4" />
+    <PackageReference Include="TiktokenSharp" Version="1.1.8" />
+  </ItemGroup>
 
 </Project>
+
