@@ -86,19 +86,19 @@ jobs:
       - name: 🏗️ Build in Release mode
         run: dotnet build TokenFlow.AI.sln --configuration Release --no-restore
 
-      # 🧩 Step 1 — Pack Core
+      # 🧩 Step 1 — Pack TokenFlow.Core
       - name: 📦 Pack TokenFlow.Core
         run: dotnet pack src/TokenFlow.Core/TokenFlow.Core.csproj --configuration Release --no-build -o ./artifacts
 
-      # 🧩 Step 2 — Pack Tokenizers (standalone package)
+      # 🧩 Step 2 — Pack TokenFlow.Tokenizers (standalone)
       - name: 📦 Pack TokenFlow.Tokenizers
         run: dotnet pack src/TokenFlow.Tokenizers/TokenFlow.Tokenizers.csproj --configuration Release --no-build -o ./artifacts
 
-      # 🧩 Step 3 — Pack AI (depends on published Tokenizers)
+      # 🧩 Step 3 — Pack TokenFlow.AI (depends on Tokenizers)
       - name: 📦 Pack TokenFlow.AI
         run: dotnet pack src/TokenFlow.AI/TokenFlow.AI.csproj --configuration Release -o ./artifacts /p:UsePackageReference=true
 
-      # 📤 Optional: upload artifacts for manual inspection
+      # 📤 Optional: Upload artifacts for inspection
       - name: 📤 Upload built NuGet packages
         uses: actions/upload-artifact@v4
         with:
@@ -106,9 +106,17 @@ jobs:
           path: ./artifacts/*.nupkg
           retention-days: 7
 
-      # 🚀 Step 4 — Publish all packages to NuGet
+      # 🚀 Step 4 — Publish each package separately
       - name: 🚀 Publish to NuGet (only on tagged release)
-        run: dotnet nuget push "./artifacts/*.nupkg" \
-               --api-key ${{ secrets.NUGET_API_KEY }} \
-               --source https://api.nuget.org/v3/index.json \
-               --skip-duplicate
+        run: |
+          echo "🚀 Publishing all NuGet packages from ./artifacts..."
+          for pkg in ./artifacts/*.nupkg; do
+            echo "📦 Publishing $pkg ..."
+            dotnet nuget push "$pkg" \
+              --api-key "${{ secrets.NUGET_API_KEY }}" \
+              --source "https://api.nuget.org/v3/index.json" \
+              --skip-duplicate
+          done
+
+      - name: ✅ Done
+        run: echo "🎉 All TokenFlow packages published successfully!"
