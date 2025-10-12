@@ -16,10 +16,14 @@ namespace TokenFlow.AI.Registry
             try
             {
                 string json = File.ReadAllText(path);
-                var models = JsonSerializer.Deserialize<List<ModelSpec>>(json,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                return models ?? new List<ModelSpec>();
+                var data = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ModelSpecData>>(json);
+                var models = new List<ModelSpec>();
+                if (data != null)
+                {
+                    foreach (var d in data)
+                        models.Add(d.ToModelSpec());
+                }
+                return models;
             }
             catch (Exception)
             {

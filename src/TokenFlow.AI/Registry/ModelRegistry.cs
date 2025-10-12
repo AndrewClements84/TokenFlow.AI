@@ -129,12 +129,15 @@ namespace TokenFlow.AI.Registry
 
             try
             {
-                var models = JsonConvert.DeserializeObject<List<ModelSpec>>(json);
-                if (models == null)
+                var data = JsonConvert.DeserializeObject<List<ModelSpecData>>(json);
+                if (data == null)
                     return;
 
-                foreach (var model in models)
-                    Register(model);
+                foreach (var item in data)
+                {
+                    var spec = item.ToModelSpec();
+                    Register(spec);
+                }
             }
             catch (JsonException)
             {
