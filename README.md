@@ -16,43 +16,27 @@
 
 ### 💡 Overview
 
-**TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT‑4o, Anthropic Claude, and Azure OpenAI.
+**TokenFlow.AI** is a lightweight .NET library for **tokenization**, **chunking**, and **cost estimation** across modern large language models (LLMs) such as OpenAI GPT-4o, Anthropic Claude, and Azure OpenAI.
 
-It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real‑time cost estimation for any AI‑driven application.  
+It provides accurate token counting, intelligent text splitting, cumulative usage tracking, and real-time cost estimation for any AI-driven application.  
 Now includes CLI utilities, developer documentation, full Flow.AI ecosystem integration, and automated performance benchmarking.
 
 ---
 
 ### 🧩 Key Features
 
-- 🔢 GPT‑style **token counting** for .NET  
+- 🔢 GPT-style **token counting** for .NET  
 - 🧱 Smart **text chunking** with configurable token limits and overlap  
-- 💰 Real‑time **cost estimation** for prompt and completion usage  
+- 💰 Real-time **cost estimation** for prompt and completion usage  
 - 🧮 **TokenUsageTracker** — track cumulative token and cost usage across analyses  
 - 🧩 Unified **TokenFlowClient** — analyze, chunk, and cost in one API  
-- ⚙️ **CLI utilities (TokenFlow.Tools)** — structured automation with `--format`, `--input`, and `--output` options  
+- ⚙️ **CLI utilities (TokenFlow.Tools)** — positional arguments for simplicity (`tokenflow cost "text" gpt-4o`)  
 - 📘 **Developer documentation site** — API reference + usage guides via [GitHub Pages](https://andrewclements84.github.io/TokenFlow.AI/)  
 - 🧾 **Benchmark suite** powered by BenchmarkDotNet and integrated with CI  
 - 🔌 Pluggable **tokenizer providers** — including OpenAI `tiktoken`, Claude `cl100k_base`, and Approx fallback  
 - 🔗 **Flow.AI.Core integration** — exposes `ITokenFlowProvider` for shared usage across Flow.AI ecosystem projects  
 - 💬 **CLI v3.0 alignment** — enhanced cost commands, dynamic pricing, and Flow.AI registry integration  
 - 🧠 Dual targeting for **.NET Standard 2.0** and **.NET 8.0**  
-
----
-
-### 📈 Benchmark Results (v0.7.0)
-
-TokenFlow.AI includes full **performance regression tracking** integrated into CI using BenchmarkDotNet.  
-Results are automatically compared against a baseline to ensure no degradation beyond 10%, with benchmarks now fully toggleable via the `RUN_BENCHMARKS` environment flag.
-
-| Benchmark | Mean (µs) | Error | Ratio | Allocations |
-|------------|-----------|-------|--------|--------------|
-| TokenizerBenchmarks.CountTokens_OpenAI | 45.2 | 0.6 | 1.00x | 0 B |
-| TokenizerBenchmarks.CountTokens_Claude | 46.8 | 0.7 | 1.04x | 0 B |
-| ChunkerBenchmarks.ChunkByTokens | 210.4 | 1.8 | 1.00x | 512 B |
-| CostEstimatorBenchmarks.EstimateTotalCost | 7.8 | 0.2 | 1.00x | 0 B |
-
-Benchmarks are re‑run automatically in CI with each build, and can be disabled for faster builds using `RUN_BENCHMARKS=false`.
 
 ---
 
@@ -82,13 +66,41 @@ int tokens = provider.CountTokens("gpt-4o-mini", "Hello Flow.AI!");
 Console.WriteLine($"Token count: {tokens}");
 ```
 
-#### **CLI Cost Analysis:**
+---
 
+### 💰 CLI Usage (Positional Arguments)
+
+#### **Estimate Token Cost**
 ```bash
-tokenflow cost --model gpt-4o --input "Estimate my token cost"
+tokenflow cost "Estimate my token cost" gpt-4o
 ```
 
-#### **Benchmarking tokenizers:**
+#### **Analyze Prompt Text**
+```bash
+tokenflow analyze "Explain large language models simply." gpt-4o-mini
+```
+
+#### **Compare Multiple Models**
+```bash
+tokenflow compare "Summarize this text" gpt-4o gpt-3.5-turbo claude-3.5-sonnet
+```
+
+#### **Count Tokens**
+```bash
+tokenflow count "Estimate my token cost"
+```
+
+#### **List Available Models**
+```bash
+tokenflow list-models
+```
+
+> 💡 *All CLI commands support positional arguments — text first, model second.*  
+> Named flags (`--model`, `--input`) will be added in a future developer-UX update.
+
+---
+
+### 🧪 Running Benchmarks
 
 ```bash
 dotnet run -c Release --project src/TokenFlow.Tools.Benchmarks
@@ -148,6 +160,7 @@ TokenFlow.AI serves as the **engine layer** of the Flow.AI ecosystem, powering a
 #### 🌟 Future Goals
 - [ ] Extend CLI tooling for full Flow.AI ecosystem interoperability
 - [ ] Implement enhanced Flow.AI shared configuration support
+- [ ] Add named argument flags (`--model`, `--input`) for CLI commands
 - [ ] Begin **PromptStream.AI** cockpit integration phase
 
 ---
