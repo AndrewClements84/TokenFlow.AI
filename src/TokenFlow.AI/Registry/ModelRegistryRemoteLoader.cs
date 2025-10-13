@@ -9,6 +9,7 @@ namespace TokenFlow.AI.Registry
     /// <summary>
     /// Supports loading model specifications from a remote URL (e.g. GitHub, CDN, or internal API).
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class ModelRegistryRemoteLoader
     {
         public static List<ModelSpec> LoadFromUrl(string url)

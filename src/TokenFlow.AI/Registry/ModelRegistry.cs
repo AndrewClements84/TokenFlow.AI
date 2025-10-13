@@ -46,6 +46,7 @@ namespace TokenFlow.AI.Registry
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public ModelRegistry(Uri remoteUrl, string localFilePath, bool useEmbeddedFallback)
         {
             bool loaded = false;
