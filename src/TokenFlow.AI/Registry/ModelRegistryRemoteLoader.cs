@@ -24,19 +24,23 @@ namespace TokenFlow.AI.Registry
                     if (string.IsNullOrWhiteSpace(json))
                         return null;
 
-                    var models = JsonSerializer.Deserialize<List<ModelSpec>>(json,
+                    var raw = JsonSerializer.Deserialize<List<ModelSpecData>>(json,
                         new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    if (raw == null) return null;
+
+                    var models = new List<ModelSpec>(raw.Count);
+                    foreach (var d in raw)
+                        models.Add(d.ToModelSpec());
 
                     return models;
                 }
             }
             catch (Exception ex)
             {
-                // In production code, consider logging or providing detailed diagnostics.
                 Console.WriteLine($"[TokenFlow.AI] Failed to load remote models: {ex.Message}");
                 return null;
             }
         }
     }
 }
-

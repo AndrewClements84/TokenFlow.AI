@@ -1,47 +1,79 @@
 ﻿[
   {
     "Id": "gpt-4o",
-    "Family": "openai",
+    "Provider": "OpenAI",
     "TokenizerName": "approx",
     "MaxInputTokens": 128000,
     "MaxOutputTokens": 4096,
     "InputPricePer1K": 0.01,
-    "OutputPricePer1K": 0.03
+    "OutputPricePer1K": 0.03,
+    "DisplayName": "GPT-4o",
+    "SchemaVersion": "2.0"
   },
   {
     "Id": "gpt-4o-mini",
-    "Family": "openai",
+    "Provider": "OpenAI",
     "TokenizerName": "approx",
-    "MaxInputTokens": 128000,
+    "MaxInputTokens": 16384,
     "MaxOutputTokens": 4096,
-    "InputPricePer1K": 0.005,
-    "OutputPricePer1K": 0.015
+    "InputPricePer1K": 0.15,
+    "OutputPricePer1K": 0.60,
+    "DisplayName": "GPT-4o Mini",
+    "SchemaVersion": "2.0"
   },
   {
-    "Id": "gpt-5o",
-    "Family": "openai",
+    "Id": "gpt-5",
+    "Provider": "OpenAI",
     "TokenizerName": "approx",
+    "MaxInputTokens": 272000,
+    "MaxOutputTokens": 128000,
+    "InputPricePer1K": 0.00125,
+    "OutputPricePer1K": 0.0100,
+    "DisplayName": "GPT-5",
+    "SchemaVersion": "2.0"
+  },
+  {
+    "Id": "gpt-5-mini",
+    "Provider": "OpenAI",
+    "TokenizerName": "approx",
+    "MaxInputTokens": 131072,
+    "MaxOutputTokens": 65536,
+    "InputPricePer1K": 0.00025,
+    "OutputPricePer1K": 0.0020,
+    "DisplayName": "GPT-5 Mini",
+    "SchemaVersion": "2.0"
+  },
+  {
+    "Id": "claude-opus-4",
+    "Provider": "Anthropic",
+    "TokenizerName": "claude-tokenizer",
     "MaxInputTokens": 200000,
-    "MaxOutputTokens": 8192,
-    "InputPricePer1K": 0.02,
-    "OutputPricePer1K": 0.06
+    "MaxOutputTokens": 200000,
+    "InputPricePer1K": 0.015,
+    "OutputPricePer1K": 0.075,
+    "DisplayName": "Claude Opus 4",
+    "SchemaVersion": "2.0"
   },
   {
-    "Id": "claude-3-opus",
-    "Family": "anthropic",
-    "TokenizerName": "approx",
+    "Id": "claude-sonnet-4",
+    "Provider": "Anthropic",
+    "TokenizerName": "claude-tokenizer",
     "MaxInputTokens": 200000,
-    "MaxOutputTokens": 4096,
-    "InputPricePer1K": 0.008,
-    "OutputPricePer1K": 0.024
+    "MaxOutputTokens": 200000,
+    "InputPricePer1K": 0.003,
+    "OutputPricePer1K": 0.015,
+    "DisplayName": "Claude Sonnet 4",
+    "SchemaVersion": "2.0"
   },
   {
-    "Id": "gemini-1.5-pro",
-    "Family": "google",
-    "TokenizerName": "approx",
-    "MaxInputTokens": 128000,
-    "MaxOutputTokens": 8192,
-    "InputPricePer1K": 0.01,
-    "OutputPricePer1K": 0.03
+    "Id": "gemini-2.5-pro",
+    "Provider": "Google",
+    "TokenizerName": "gemini-tokenizer",
+    "MaxInputTokens": 1048576,
+    "MaxOutputTokens": 65536,
+    "InputPricePer1K": 0.00125,
+    "OutputPricePer1K": 0.0100,
+    "DisplayName": "Gemini 2.5 Pro",
+    "SchemaVersion": "2.0"
   }
 ]

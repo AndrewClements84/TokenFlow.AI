@@ -6,7 +6,7 @@
 		<RootNamespace>TokenFlow.AI</RootNamespace>
 
 		<PackageId>TokenFlow.AI</PackageId>
-		<Version>0.8.0</Version>
+		<Version>0.8.1</Version>
 		<Authors>Andrew Clements</Authors>
 		<Company>Andrew Clements</Company>
 		<Product>TokenFlow.AI</Product>
@@ -44,8 +44,8 @@
 		<ProjectReference Include="..\TokenFlow.Core\TokenFlow.Core.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="Data\models.data" />
-	</ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\models.data" />
+  </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@
 		<AssemblyName>TokenFlow.Tokenizers</AssemblyName>
 
 		<PackageId>TokenFlow.Tokenizers</PackageId>
-		<Version>0.8.0</Version>
+		<Version>0.8.1</Version>
 		<Authors>Andrew Clements</Authors>
 		<Company>Andrew Clements</Company>
 		<Product>TokenFlow.Tokenizers</Product>

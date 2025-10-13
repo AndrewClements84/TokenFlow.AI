@@ -220,5 +220,17 @@ namespace TokenFlow.AI.Tests.Registry
             // Cleanup
             File.Delete(tempFile);
         }
+
+        [Fact]
+        public void EmbeddedModels_ShouldLoadSuccessfully()
+        {
+            var registry = new ModelRegistry();
+            var models = registry.GetAll();
+
+            Assert.NotEmpty(models);
+            Assert.Contains(models, m => m.Id == "gpt-4o");
+            Assert.Contains(models, m => m.Id == "gpt-4o-mini");
+            Assert.Equal("Embedded", registry.LoadSource);
+        }
     }
 }
